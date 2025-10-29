@@ -1,0 +1,166 @@
+/* -------------------- RESET OUTSETA THEME -------------------- */
+#vault-auth [data-outseta-style],
+#vault-auth [data-outseta-style] * {
+  all: unset !important;
+  display: revert !important;
+  box-sizing: border-box !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+/* -------------------- VAULT LOGIN CORE -------------------- */
+.vault-login {
+  position: relative;
+  color: #f6e6b2;
+  text-align: left;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+.vault-title {
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 20px rgba(209, 181, 115, 0.25);
+}
+
+/* -------------------- INPUT FIELDS -------------------- */
+#vault-auth input[type="email"],
+#vault-auth input[type="password"],
+#vault-auth input[type="text"] {
+  width: 100% !important;
+  padding: 0.75rem 1rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.75rem !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid rgba(209, 181, 115, 0.25) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  color: #f6e6b2 !important;
+  font-size: 0.95rem !important;
+  outline: none !important;
+  transition: all 0.25s ease !important;
+}
+
+#vault-auth input:focus {
+  border-color: #d1b573 !important;
+  box-shadow: 0 0 10px rgba(209, 181, 115, 0.35) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+#vault-auth input::placeholder {
+  color: rgba(246, 230, 178, 0.4) !important;
+}
+
+/* -------------------- LABELS -------------------- */
+#vault-auth label {
+  display: block !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  color: rgba(246, 230, 178, 0.9) !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.25rem !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* -------------------- BUTTON -------------------- */
+#vault-auth button,
+#vault-auth input[type="submit"],
+#vault-auth .o--Button--btn,
+#vault-auth [class*="button"] {
+  width: 100% !important;
+  margin-top: 1.25rem !important;
+  background: linear-gradient(to bottom, #d1b573, #b8944a) !important;
+  color: #0b0603 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  border: none !important;
+  border-radius: 0.75rem !important;
+  padding: 0.75rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 0 25px rgba(209, 181, 115, 0.25) !important;
+  letter-spacing: 0.5px !important;
+}
+
+#vault-auth button:hover,
+#vault-auth input[type="submit"]:hover,
+#vault-auth .o--Button--btn:hover {
+  background: linear-gradient(to bottom, #f6e6b2, #d1b573) !important;
+  box-shadow: 0 0 45px rgba(209, 181, 115, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+#vault-auth button:active,
+#vault-auth input[type="submit"]:active {
+  transform: translateY(0) !important;
+}
+
+/* -------------------- FORGOT PASSWORD & LINKS -------------------- */
+#vault-auth a[href*="forgot"],
+#vault-auth a[href*="register"],
+#vault-auth a.o--AuthLink--link,
+#vault-auth a {
+  display: block !important;
+  margin-top: 1rem !important;
+  text-align: center !important;
+  color: #f6e6b2 !important;
+  font-size: 0.85rem !important;
+  text-decoration: none !important;
+  opacity: 0.8 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+#vault-auth a:hover {
+  opacity: 1 !important;
+  text-shadow: 0 0 10px rgba(209, 181, 115, 0.4) !important;
+}
+
+/* -------------------- ERROR MESSAGES -------------------- */
+#vault-auth .error,
+#vault-auth [class*="error"],
+#vault-auth [class*="Error"] {
+  color: #ff6b6b !important;
+  font-size: 0.8rem !important;
+  margin-top: 0.5rem !important;
+  padding: 0.5rem !important;
+  background: rgba(255, 107, 107, 0.1) !important;
+  border-radius: 0.5rem !important;
+  border-left: 3px solid #ff6b6b !important;
+}
+
+/* -------------------- FORM CONTAINER -------------------- */
+#vault-auth {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+/* Ensure form elements are visible */
+#vault-auth form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------------------- LOADING STATE -------------------- */
+#vault-auth.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 480px) {
+  .vault-login {
+    width: 90vw !important;
+    padding: 2rem !important;
+  }
+}
