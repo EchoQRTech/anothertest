@@ -5,33 +5,33 @@ export default function VaultFormatter() {
   /* ---------- OPTIONS ---------- */
   const options = {
     brand: [
-      "Harley-Davidson","Nike","Adidas","Levi's","Patagonia","The North Face",
-      "Champion","Carhartt","Guess","Reebok","Y2K No Brand",
+      "Harley-Davidson", "Nike", "Adidas", "Levi's", "Patagonia", "The North Face",
+      "Champion", "Carhartt", "Guess", "Reebok", "Y2K No Brand",
     ],
     category: [
-      "T-Shirt","Hoodie","Sweatshirt","Jacket","Jeans",
-      "Sneakers","Crewneck","Cap","Accessory","Pants","Shorts",
+      "T-Shirt", "Hoodie", "Sweatshirt", "Jacket", "Jeans",
+      "Sneakers", "Crewneck", "Cap", "Accessory", "Pants", "Shorts",
     ],
-    era: ["80s","90s","2000s","Y2K","Modern","Retro Revival"],
-    size: ["XS","S","M","L","XL","XXL","XXXL","One Size"],
+    era: ["80s", "90s", "2000s", "Y2K", "Modern", "Retro Revival"],
+    size: ["XS", "S", "M", "L", "XL", "XXL", "XXXL", "One Size"],
     condition: [
-      "Excellent condition","Good vintage condition",
-      "Distressed vintage wear","Brand new with tags",
+      "Excellent condition", "Good vintage condition",
+      "Distressed vintage wear", "Brand new with tags",
     ],
     style: [
-      "Streetwear","Y2K","Minimalist","Workwear","Biker",
-      "Retro","Sporty","Vintage Classic",
+      "Streetwear", "Y2K", "Minimalist", "Workwear", "Biker",
+      "Retro", "Sporty", "Vintage Classic",
     ],
   };
 
   /* ---------- UNCONTROLLED INPUTS ---------- */
-  const eraRef = useRef<HTMLInputElement>(null);
-  const categoryRef = useRef<HTMLInputElement>(null);
-  const brandRef = useRef<HTMLInputElement>(null);
-  const shortRef = useRef<HTMLInputElement>(null);
-  const sizeRef = useRef<HTMLInputElement>(null);
-  const conditionRef = useRef<HTMLInputElement>(null);
-  const styleRef = useRef<HTMLInputElement>(null);
+  const eraRef = useRef<HTMLInputElement | null>(null);
+  const categoryRef = useRef<HTMLInputElement | null>(null);
+  const brandRef = useRef<HTMLInputElement | null>(null);
+  const shortRef = useRef<HTMLInputElement | null>(null);
+  const sizeRef = useRef<HTMLInputElement | null>(null);
+  const conditionRef = useRef<HTMLInputElement | null>(null);
+  const styleRef = useRef<HTMLInputElement | null>(null);
 
   /* ---------- STATE ---------- */
   const [output, setOutput] = useState("");
@@ -87,7 +87,7 @@ export default function VaultFormatter() {
     setTimeout(() => setCopied(false), 1200);
   };
 
-  /* ---------- SIMPLE FIELD ---------- */
+  /* ---------- FIELD COMPONENT ---------- */
   function Field({
     label,
     placeholder,
@@ -97,7 +97,7 @@ export default function VaultFormatter() {
     label: string;
     placeholder: string;
     listId?: string;
-    inputRef: React.RefObject<HTMLInputElement>;
+    inputRef: React.RefObject<HTMLInputElement | null>; // ✅ fixed type
   }) {
     return (
       <div className="relative flex flex-col">
@@ -127,7 +127,7 @@ export default function VaultFormatter() {
           </p>
         </div>
 
-        {/* DATALISTS (native autocompletes) */}
+        {/* DATALISTS */}
         <datalist id="dl-era">{options.era.map((o)=><option key={o} value={o}/>)}</datalist>
         <datalist id="dl-category">{options.category.map((o)=><option key={o} value={o}/>)}</datalist>
         <datalist id="dl-brand">{options.brand.map((o)=><option key={o} value={o}/>)}</datalist>
@@ -159,7 +159,7 @@ export default function VaultFormatter() {
             {/* HEADER */}
             <div className="flex justify-between items-center px-6 py-4 bg-[#A00028] text-white backdrop-blur-sm">
               <h2 className="text-lg font-semibold flex items-center gap-2">
-                <span className="text-xl"></span> Your Vault Listing
+                <span className="text-xl">✨</span> Your Vault Listing
               </h2>
               <button
                 onClick={handleCopy}
