@@ -32,6 +32,7 @@ export default function Page() {
 function Navbar() {
   return (
     <nav className="w-full fixed top-0 left-0 z-50 flex justify-between items-center px-6 sm:px-10 lg:px-16 py-4 backdrop-blur-xl bg-white/90 border-b border-gray-200 shadow-sm">
+      {/* ---------- LOGO ---------- */}
       <div className="flex items-center">
         <Image
           src="/images/logo.png"
@@ -42,6 +43,7 @@ function Navbar() {
         />
       </div>
 
+      {/* ---------- NAV LINKS ---------- */}
       <div className="hidden md:flex gap-10 text-[15px] text-gray-700 font-medium">
         <a href="#features" className="hover:text-[#A00028] transition">
           Features
@@ -57,17 +59,32 @@ function Navbar() {
         </a>
       </div>
 
+      {/* ---------- AUTH BUTTONS ---------- */}
       <div className="flex items-center gap-4">
-        <button className="text-sm sm:text-[15px] text-gray-800 hover:text-[#A00028] transition font-medium">
+        {/* ✅ LOGIN BUTTON */}
+        <a
+          href="https://treasuretto-llc.outseta.com/auth?widgetMode=login#o-anonymous"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm sm:text-[15px] text-gray-800 hover:text-[#A00028] transition font-medium"
+        >
           Log In
-        </button>
-        <button className="bg-[#A00028] hover:bg-[#850020] transition-all text-white text-sm sm:text-[15px] px-5 sm:px-6 py-2.5 rounded-lg shadow-[0_2px_12px_rgba(160,0,40,0.25)] hover:shadow-[0_0_25px_rgba(160,0,40,0.35)] duration-300 font-medium">
-          Unlock Now
-        </button>
+        </a>
+
+        {/* ✅ SIGNUP BUTTON */}
+        <a
+          href="https://treasuretto-llc.outseta.com/auth?widgetMode=register#o-anonymous"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[#A00028] hover:bg-[#850020] transition-all text-white text-sm sm:text-[15px] px-5 sm:px-6 py-2.5 rounded-lg shadow-[0_2px_12px_rgba(160,0,40,0.25)] hover:shadow-[0_0_25px_rgba(160,0,40,0.35)] duration-300 font-medium"
+        >
+          Get Started
+        </a>
       </div>
     </nav>
   );
 }
+
 
 /* ---------- HERO ---------- */
 function Hero() {
@@ -77,16 +94,15 @@ function Hero() {
         Vault OS for Resellers
       </h3>
       <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight text-[#0a0a0a] mb-8 tracking-tight font-[SF Pro Display]">
-        Your Reselling Empire.
+     Learn. Automate. Dominate
         <br className="hidden sm:block" />
         <span className="text-[#A00028] drop-shadow-[0_2px_5px_rgba(160,0,40,0.25)]">
           Connected.
         </span>
       </h1>
       <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
-        One unified platform where sellers automate listings, track profits, and
-        master resale strategy — all in one daring system built for modern
-        resellers.
+        The world’s first AI-powered resale ecosystem.
+Free education. Smarter tools. Infinite opportunity.
       </p>
       <button className="bg-[#A00028] hover:bg-[#850020] transition-all text-white font-semibold px-8 py-4 rounded-md text-lg shadow-[0_2px_12px_rgba(160,0,40,0.25)] hover:shadow-[0_0_25px_rgba(160,0,40,0.4)] duration-300 mb-16">
         Unlock Now
@@ -212,53 +228,52 @@ function Testimonials() {
   
 }
 /* ---------- COMPARISON TABLE SECTION ---------- */
+/* ---------- WHY USE THE VAULT SECTION ---------- */
 function ComparisonTable() {
-  const tiers = ["Education", "Starter", "Access", "Pro"];
+  const methods = ["Manual Research", "YouTube Guides", "Random Spreadsheets", "The Vault"];
 
   const features = [
     {
-      label: "AI Tools Suite (Title Genius, Price Predictor, etc.)",
-      values: [false, true, true, true],
-    },
-    {
-      label: "Spreadsheet Vault (50+ templates)",
-      values: [true, true, true, true],
-    },
-    {
-      label: "Vault Index Market Data",
-      values: [false, false, true, true],
-    },
-    {
-      label: "Weekly Trend Drops",
-      values: [true, true, true, true],
-    },
-    {
-      label: "Affiliate Dashboard & Earnings",
-      values: [false, true, true, true],
-    },
-    {
-      label: "Private Community Access",
-      values: [true, true, true, true],
-    },
-    {
-      label: "Team Accounts (Up to 5 Users)",
+      label: "Up-to-Date Trend Data & Brand Tracking",
       values: [false, false, false, true],
     },
     {
-      label: "Priority Support + Early Features",
+      label: "AI Tools (Title Genius, Price Predictor, etc.)",
+      values: [false, false, false, true],
+    },
+    {
+      label: "Spreadsheet Vault (50+ Pre-Built Systems)",
       values: [false, false, true, true],
     },
     {
-      label: "1-on-1 Strategy Calls",
+      label: "Weekly Market Drops & Sourcing Updates",
+      values: [false, true, false, true],
+    },
+    {
+      label: "Negotiation Scripts & Pricing Templates",
+      values: [false, false, false, true],
+    },
+    {
+      label: "Community of Verified Resellers",
+      values: [false, false, false, true],
+    },
+    {
+      label: "Affiliate Income Opportunities",
+      values: [false, false, false, true],
+    },
+    {
+      label: "All-In-One Dashboard (No Switching Tools)",
+      values: [false, false, false, true],
+    },
+    {
+      label: "Lifetime Learning & Updates",
       values: [false, false, false, true],
     },
   ];
 
-  const prices = ["Free", "$10/mo", "$25/mo", "$99/mo"];
-
   return (
     <section
-      id="comparison"
+      id="why-vault"
       className="relative w-full max-w-7xl mx-auto px-6 md:px-10 py-32 text-center border-t border-gray-100 overflow-hidden"
     >
       {/* BACKGROUND GRADIENT */}
@@ -268,10 +283,10 @@ function ComparisonTable() {
       <div className="relative">
         {/* HEADER */}
         <h2 className="text-5xl font-extrabold font-[SF Pro Display] mb-6 text-[#0a0a0a]">
-          Compare <span className="text-[#A00028]">Vault Plans</span>
+          Why <span className="text-[#A00028]">Use The Vault?</span>
         </h2>
         <p className="text-gray-500 max-w-2xl mx-auto mb-16 text-lg">
-          See exactly what each membership includes and find your perfect match.
+          Compare traditional reseller methods vs. The Vault’s all-in-one system.
         </p>
 
         {/* TABLE */}
@@ -280,17 +295,14 @@ function ComparisonTable() {
             <thead>
               <tr className="bg-[#fafafa] text-[#0a0a0a]">
                 <th className="py-5 px-4 text-sm font-medium text-gray-500"></th>
-                {tiers.map((tier, i) => (
+                {methods.map((method, i) => (
                   <th
                     key={i}
                     className={`py-5 px-4 text-center font-semibold ${
-                      i === 2 ? "bg-[#A00028]/10 text-[#A00028]" : ""
+                      i === 3 ? "bg-[#A00028]/10 text-[#A00028]" : ""
                     }`}
                   >
-                    {tier}
-                    <div className="text-sm text-gray-500 mt-1 font-normal">
-                      {prices[i]}
-                    </div>
+                    {method}
                   </th>
                 ))}
               </tr>
@@ -309,7 +321,7 @@ function ComparisonTable() {
                     <td
                       key={j}
                       className={`py-4 text-center ${
-                        j === 2 ? "bg-[#A00028]/5" : ""
+                        j === 3 ? "bg-[#A00028]/5" : ""
                       }`}
                     >
                       {val ? (
@@ -333,8 +345,11 @@ function ComparisonTable() {
             onClick={() => window.Outseta?.AuthWidget.showSignUp()}
             className="bg-[#A00028] hover:bg-[#850020] text-white font-semibold px-10 py-4 rounded-xl shadow-[0_8px_30px_rgba(160,0,40,0.25)] hover:shadow-[0_10px_45px_rgba(160,0,40,0.35)] transition-all"
           >
-            Join The Vault Today
+            Unlock The Vault Today
           </button>
+          <p className="text-gray-500 mt-4">
+            Stop guessing. Start reselling with data, AI, and strategy on your side.
+          </p>
         </div>
       </div>
     </section>
@@ -409,7 +424,7 @@ function PricingSection() {
       id="pricing"
       className="relative w-full max-w-7xl mx-auto px-6 md:px-10 py-32 text-center overflow-hidden"
     >
-      {/* GRADIENT BACKGROUND */}
+      {/* BACKGROUND GRADIENT */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#ffffff] via-[#fff5f5] to-[#ffeef0]" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[#A00028]/10 blur-[160px] rounded-full opacity-60" />
 
@@ -427,66 +442,119 @@ function PricingSection() {
 
       {/* GRID */}
       <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
-        {tiers.map((tier, i) => (
-          <div
-            key={i}
-            className={`relative group rounded-2xl p-10 flex flex-col items-center text-center border transition-all duration-500 backdrop-blur-xl
-              ${
-                tier.featured
-                  ? "border-[#A00028]/30 bg-white/80 shadow-[0_20px_90px_rgba(160,0,40,0.15)] scale-[1.05]"
-                  : "border-white/60 bg-white/70 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] hover:scale-[1.02]"
-              }
-            `}
-          >
-            {tier.featured && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#A00028] text-white text-[11px] tracking-wide px-4 py-1 rounded-full shadow-md">
-                MOST POPULAR
-              </div>
-            )}
 
-            {/* TITLE */}
-            <h3 className="text-[22px] font-semibold mb-1 text-[#0a0a0a]">
-              {tier.name}
-            </h3>
-            <p className="text-gray-500 text-sm mb-8">{tier.desc}</p>
+        {/* EDUCATION VAULT (Free) */}
+        <div className="relative group rounded-2xl p-10 flex flex-col items-center text-center border transition-all duration-500 backdrop-blur-xl border-white/60 bg-white/80 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] hover:scale-[1.02]">
+          <h3 className="text-[22px] font-semibold mb-1 text-[#0a0a0a]">Education Vault</h3>
+          <p className="text-gray-500 text-sm mb-8">Master reselling fundamentals at zero cost.</p>
 
-            {/* PRICE */}
-            <div className="flex items-end justify-center mb-8">
-              <span className="text-5xl font-extrabold text-[#0a0a0a] leading-none tracking-tight">
-                {tier.price}
-              </span>
-              {tier.price !== "Free" && (
-                <span className="text-gray-400 text-sm ml-1 mb-1">/mo</span>
-              )}
-            </div>
-
-            {/* FEATURES */}
-            <ul className="text-gray-700 text-[15px] space-y-3 mb-10 text-left w-full leading-relaxed">
-              {tier.details.map((d, j) => (
-                <li
-                  key={j}
-                  className="flex items-start gap-2 leading-snug text-gray-700"
-                >
-                  <span className="text-[#A00028] mt-[2px]">•</span> {d}
-                </li>
-              ))}
-            </ul>
-
-            {/* BUTTON */}
-            <button
-              onClick={() =>
-                window.Outseta?.AuthWidget.showSignUp({ planUid: tier.planUid })
-              }
-              className={`w-full py-3.5 rounded-xl font-semibold transition-all duration-300 ${
-                tier.featured
-                  ? "bg-[#A00028] text-white hover:bg-[#850020]"
-                  : "bg-[#0a0a0a] text-white hover:bg-[#1a1a1a]"
-              } shadow-[0_6px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]`}
-            >
-              {tier.buttonText}
-            </button>
+          <div className="flex items-end justify-center mb-8">
+            <span className="text-5xl font-extrabold text-[#0a0a0a] leading-none tracking-tight">Free</span>
           </div>
-        ))}
+
+          <ul className="text-gray-700 text-[15px] space-y-3 mb-10 text-left w-full leading-relaxed">
+            <li>• Free reseller education content</li>
+            <li>• Beginner spreadsheets</li>
+            <li>• Weekly trend previews</li>
+            <li>• Community access</li>
+          </ul>
+
+          <a
+            href="https://treasuretto-llc.outseta.com/auth?widgetMode=register&planUid=L9PB36mJ&planPaymentTerm=month&skipPlanOptions=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-3.5 rounded-xl font-semibold bg-[#A00028] text-white hover:bg-[#850020] transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
+          >
+            Join Free
+          </a>
+        </div>
+
+        {/* VAULT STARTER ($10) */}
+        <div className="relative group rounded-2xl p-10 flex flex-col items-center text-center border transition-all duration-500 backdrop-blur-xl border-white/60 bg-white/70 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] hover:scale-[1.02]">
+          <h3 className="text-[22px] font-semibold mb-1 text-[#0a0a0a]">Vault Starter</h3>
+          <p className="text-gray-500 text-sm mb-8">Tools and insights for new sellers ready to grow.</p>
+
+          <div className="flex items-end justify-center mb-8">
+            <span className="text-5xl font-extrabold text-[#0a0a0a] leading-none tracking-tight">$10</span>
+            <span className="text-gray-400 text-sm ml-1 mb-1">/mo</span>
+          </div>
+
+          <ul className="text-gray-700 text-[15px] space-y-3 mb-10 text-left w-full leading-relaxed">
+            <li>• 20+ spreadsheet templates</li>
+            <li>• Title Genius + Price Predictor</li>
+            <li>• Weekly trend drops</li>
+            <li>• Affiliate dashboard</li>
+          </ul>
+
+          <a
+            href="https://treasuretto-llc.outseta.com/auth?widgetMode=register&planUid=DQ2L0LWV&planPaymentTerm=month&skipPlanOptions=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-3.5 rounded-xl font-semibold bg-[#0a0a0a] text-white hover:bg-[#1a1a1a] transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
+          >
+            Start Now
+          </a>
+        </div>
+
+        {/* VAULT PRO ($25) — FEATURED */}
+        <div className="relative group featured rounded-2xl p-10 flex flex-col items-center text-center border transition-all duration-500 backdrop-blur-xl border-[#A00028]/30 bg-white/80 shadow-[0_20px_90px_rgba(160,0,40,0.15)] scale-[1.05]">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#A00028] text-white text-[11px] tracking-wide px-4 py-1 rounded-full shadow-md">
+            MOST POPULAR
+          </div>
+
+          <h3 className="text-[22px] font-semibold mb-1 text-[#0a0a0a]">Vault Pro</h3>
+          <p className="text-gray-500 text-sm mb-8">Unlock all AI tools, spreadsheets, and market data.</p>
+
+          <div className="flex items-end justify-center mb-8">
+            <span className="text-5xl font-extrabold text-[#0a0a0a] leading-none tracking-tight">$25</span>
+            <span className="text-gray-400 text-sm ml-1 mb-1">/mo</span>
+          </div>
+
+          <ul className="text-gray-700 text-[15px] space-y-3 mb-10 text-left w-full leading-relaxed">
+            <li>• All AI Tools (Vault.AI Suite)</li>
+            <li>• 50+ Spreadsheet Templates</li>
+            <li>• Vault Index Dashboard</li>
+            <li>• Private Community Access</li>
+            <li>• Affiliate Earnings System</li>
+          </ul>
+
+          <a
+            href="https://treasuretto-llc.outseta.com/auth?widgetMode=register&planUid=L9nbXX9Z&planPaymentTerm=month&skipPlanOptions=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-3.5 rounded-xl font-semibold bg-[#A00028] text-white hover:bg-[#850020] transition-all duration-300 shadow-[0_8px_30px_rgba(160,0,40,0.3)]"
+          >
+            Get Started
+          </a>
+        </div>
+
+        {/* VAULT ELITE ($99) */}
+        <div className="relative group rounded-2xl p-10 flex flex-col items-center text-center border transition-all duration-500 backdrop-blur-xl border-white/60 bg-white/70 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] hover:scale-[1.02]">
+          <h3 className="text-[22px] font-semibold mb-1 text-[#0a0a0a]">Vault Elite</h3>
+          <p className="text-gray-500 text-sm mb-8">Enterprise-level automations and strategic scaling.</p>
+
+          <div className="flex items-end justify-center mb-8">
+            <span className="text-5xl font-extrabold text-[#0a0a0a] leading-none tracking-tight">$99</span>
+            <span className="text-gray-400 text-sm ml-1 mb-1">/mo</span>
+          </div>
+
+          <ul className="text-gray-700 text-[15px] space-y-3 mb-10 text-left w-full leading-relaxed">
+            <li>• Everything in Vault Pro</li>
+            <li>• Priority feature access</li>
+            <li>• Custom AI automations</li>
+            <li>• Team accounts (5 users)</li>
+            <li>• Private reseller calls</li>
+          </ul>
+
+          <a
+            href="https://treasuretto-llc.outseta.com/auth?widgetMode=register&planUid=xmeMVwmV&planPaymentTerm=month&skipPlanOptions=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-3.5 rounded-xl font-semibold bg-[#0a0a0a] text-white hover:bg-[#1a1a1a] transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.08)]"
+          >
+            Go Elite
+          </a>
+        </div>
       </div>
 
       <p className="relative text-gray-400 text-xs mt-16">
@@ -496,64 +564,6 @@ function PricingSection() {
   );
 }
 
-/* ---------- PLAN DATA ---------- */
-const tiers = [
-  {
-    name: "Education Vault",
-    price: "Free",
-    desc: "Master reselling fundamentals at zero cost.",
-    details: [
-      "Free reseller education content",
-      "Beginner spreadsheets",
-      "Weekly trend previews",
-      "Community access",
-    ],
-    planUid: "L9PB36mJ",
-    buttonText: "Join Free",
-  },
-  {
-    name: "Vault Starter",
-    price: "$10",
-    desc: "Tools and insights for new sellers ready to grow.",
-    details: [
-      "20+ spreadsheet templates",
-      "Title Genius + Price Predictor",
-      "Weekly trend drops",
-      "Affiliate dashboard",
-    ],
-    planUid: "L9PB36nJ",
-    buttonText: "Start Now",
-  },
-  {
-    name: "Vault Access",
-    price: "$25",
-    desc: "Unlock all AI tools, spreadsheets, and market data.",
-    details: [
-      "All AI Tools (Vault.AI Suite)",
-      "50+ Spreadsheet Templates",
-      "Vault Index Dashboard",
-      "Private Community Access",
-      "Affiliate Earnings System",
-    ],
-    planUid: "L9PB36oJ",
-    buttonText: "Get Started",
-    featured: true,
-  },
-  {
-    name: "Vault Pro",
-    price: "$99",
-    desc: "Enterprise-level automations and strategic scaling.",
-    details: [
-      "Everything in Vault Access",
-      "Priority feature access",
-      "Custom AI automations",
-      "Team accounts (5 users)",
-      "Private reseller calls",
-    ],
-    planUid: "L9PB36pJ",
-    buttonText: "Go Pro",
-  },
-];
 /* ---------- FAQ SECTION ---------- */
 function FAQSection() {
   const faqs = [
@@ -637,7 +647,6 @@ function FinalCTA() {
   );
 }
 
-/* ---------- FOOTER ---------- */
 function VaultFooter() {
   const links = {
     Learn: [
@@ -660,9 +669,8 @@ function VaultFooter() {
   };
 
   return (
-    <footer className="relative w-full bg-[#fafafa] border-t border-gray-200 mt-20 py-16 px-10 text-gray-600">
+    <footer className="relative w-full bg-[#fafafa] border-t border-gray-200 mt-24 py-16 px-10 text-gray-600">
       <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
-        {/* LOGO */}
         <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
           <Image
             src="/images/logo.png"
@@ -672,11 +680,10 @@ function VaultFooter() {
             className="object-contain"
           />
           <p className="text-[15px] leading-relaxed text-gray-500 max-w-xs">
-          
+            The all-in-one resale ecosystem — tools, education, and automation.
           </p>
         </div>
 
-        {/* LINKS */}
         {Object.entries(links).map(([title, items]) => (
           <div key={title}>
             <h4 className="text-[#0a0a0a] font-semibold mb-4">{title}</h4>
@@ -698,10 +705,8 @@ function VaultFooter() {
         ))}
       </div>
 
-      {/* COPYRIGHT */}
       <div className="border-t border-gray-200 mt-16 pt-6 text-center text-sm text-gray-400">
-        © {new Date().getFullYear()} The Vault by Treasuretto. All rights
-        reserved.
+        © {new Date().getFullYear()} The Vault by Treasuretto. All rights reserved.
       </div>
     </footer>
   );
