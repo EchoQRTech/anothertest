@@ -1,286 +1,271 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  Home,
-  Cpu,
-  BookOpen,
-  TrendingUp,
-  Rocket,
-  LogOut,
-  Zap,
-  Menu,
-  X,
-} from "lucide-react";
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Brain,
+  FileSpreadsheet,
+  BookOpen,
+  Share2,
+  Settings,
+  BarChart3,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
-/* ---------------- PAGE ---------------- */
 export default function Page() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const username = "Tyler";
+  useEffect(() => {
+    document.documentElement.style.background = "#ffffff";
+    document.body.style.background = "#ffffff";
+    document.body.style.fontFamily =
+      '"SF Pro Display",-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif';
+
+    if (typeof window !== "undefined" && (window as any).Outseta) {
+      (window as any).Outseta.run();
+    }
+  }, []);
+
+  const settingsHref = "https://treasuretto-llc.outseta.com/profile?#o-authenticated";
+
+  const sections = [
+    {
+      icon: <BarChart3 size={24} className="text-[#A00028]" />,
+      title: "Vault Index",
+      desc: "Track brand performance, live resale trends, and category data.",
+      href: "/vault-index",
+    },
+    {
+      icon: <Brain size={24} className="text-[#A00028]" />,
+      title: "AI Tools",
+      desc: "Access your Vault AI listing, pricing, and strategy suite.",
+      href: "/ai",
+    },
+    {
+      icon: <FileSpreadsheet size={24} className="text-[#CBAF7A]" />,
+      title: "Spreadsheet Vault",
+      desc: "50+ templates to track profits, inventory, and expenses.",
+      href: "/spreadsheets",
+    },
+    {
+      icon: <BookOpen size={24} className="text-[#A00028]" />,
+      title: "Vault Academy",
+      desc: "Learn sourcing, pricing, and buyer psychology in curated lessons.",
+      href: "/academy",
+    },
+    {
+      icon: <Share2 size={24} className="text-[#A00028]" />,
+      title: "Affiliate Program",
+      desc: "Earn commissions by sharing The Vault with other sellers.",
+      href: "/affiliate",
+    },
+    {
+      icon: <Settings size={24} className="text-gray-600" />,
+      title: "Settings & Preferences",
+      desc: "Customize notifications, themes, and integrations.",
+      href: settingsHref,
+    },
+  ];
+
+  const platforms = [
+    {
+      name: "Depop",
+      desc: "Master Depop growth — learn photography, branding, and pricing strategies that convert.",
+      image: "/images/depop.png",
+      href: "/academy/depop",
+    },
+    {
+      name: "Whatnot",
+      desc: "Host powerful live shows and optimize your auctions with proven tips and templates.",
+      image: "/images/whatnot.png",
+      href: "/academy/whatnot",
+    },
+    {
+      name: "eBay",
+      desc: "Dominate the marketplace with SEO-driven titles, dynamic pricing, and listing data.",
+      image: "/images/ebay.png",
+      href: "/academy/ebay",
+    },
+  ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-black via-[#0b0603] to-[#120a06] text-[#f6e6b2] font-[Inter] relative overflow-hidden">
-      <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-      <div
-        className={`transition-all duration-500 ${
-          menuOpen ? "blur-md pointer-events-none" : ""
-        }`}
+    <main className="min-h-screen w-full bg-gradient-to-b from-[#ffffff] via-[#fff6f6] to-[#fff0f2] flex flex-col items-center text-[#0A0A0A] px-6 py-14 sm:py-20">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-6xl"
       >
-        <Hero username={username} />
-        <VaultNexus />
-        <Academy />
-        <MarketPulse />
-        <PartnerProgram />
-      </div>
+        {/* Header */}
+        <div className="flex justify-between items-center bg-white/80 backdrop-blur-xl border border-white/70 rounded-3xl p-5 sm:p-6 shadow-[0_6px_25px_rgba(0,0,0,0.05)] mb-10">
+          <Image
+            src="/images/logo.png"
+            alt="Vault Logo"
+            width={42}
+            height={42}
+            className="object-contain hover:scale-105 transition-transform duration-300"
+          />
+
+          <a href={settingsHref} target="_blank" rel="noopener noreferrer">
+            <button className="p-2 rounded-full hover:bg-[#f5f5f5] transition">
+              <Settings size={28} className="text-[#A00028]" />
+            </button>
+          </a>
+        </div>
+
+        {/* Welcome Section */}
+        <section className="text-center mb-16">
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl sm:text-5xl font-bold text-[#0a0a0a] mb-4"
+          >
+            Welcome to <span className="text-[#A00028]">The Vault</span>
+          </motion.h1>
+        </section>
+
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sections.map((section, i) => (
+            <a
+              key={i}
+              href={section.href}
+              target={section.href === settingsHref ? "_blank" : "_self"}
+              rel={section.href === settingsHref ? "noopener noreferrer" : undefined}
+            >
+              <motion.div
+                whileHover={{
+                  scale: 1.03,
+                  y: -3,
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
+                }}
+                transition={{ duration: 0.25 }}
+                className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-[0_8px_35px_rgba(0,0,0,0.07)] transition-all duration-300 p-8 flex flex-col gap-2 cursor-pointer"
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-[#fff2f2] to-[#fafafa]">
+                    {section.icon}
+                  </div>
+                  <h3 className="text-[17px] sm:text-lg font-semibold text-[#0a0a0a]">
+                    {section.title}
+                  </h3>
+                </div>
+                <p className="text-gray-600 text-[15px] leading-snug">
+                  {section.desc}
+                </p>
+              </motion.div>
+            </a>
+          ))}
+        </div>
+
+        {/* Learn by Platform Section */}
+        <section className="mt-24 text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#0a0a0a] mb-10">
+            Learn by <span className="text-[#A00028]">Platform</span>
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            {platforms.map((platform, i) => (
+              <Link key={i} href={platform.href}>
+                <motion.div
+                  whileHover={{
+                    scale: 1.03,
+                    y: -3,
+                    boxShadow: "0 10px 28px rgba(0,0,0,0.08)",
+                  }}
+                  transition={{ duration: 0.25 }}
+                  className="bg-white rounded-3xl border border-gray-100 p-8 text-left shadow-sm hover:shadow-[0_8px_35px_rgba(0,0,0,0.07)] transition-all duration-300"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <Image
+                      src={platform.image}
+                      alt={platform.name}
+                      width={42}
+                      height={42}
+                      className="object-contain"
+                    />
+                    <h3 className="text-xl font-semibold text-[#0a0a0a]">
+                      {platform.name}
+                    </h3>
+                  </div>
+                  <p className="text-gray-600 text-[15px] leading-relaxed">
+                    {platform.desc}
+                  </p>
+                  <button className="mt-5 text-[#A00028] font-medium text-sm hover:underline">
+                    Explore →
+                  </button>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+      </motion.div>
+
+      <VaultFooter />
     </main>
   );
 }
 
-/* ---------------- SIDEBAR ---------------- */
-function Sidebar({
-  menuOpen,
-  setMenuOpen,
-}: {
-  menuOpen: boolean;
-  setMenuOpen: (v: boolean) => void;
-}) {
-  const navItems = [
-    { name: "Dashboard", icon: Home },
-    { name: "Nexus", icon: Cpu },
-    { name: "Academy", icon: BookOpen },
-    { name: "Market", icon: TrendingUp },
-    { name: "Partners", icon: Rocket },
-  ];
+/* Footer component unchanged */
+function VaultFooter() {
+  const links = {
+    Learn: [
+      { name: "Getting Started", href: "#" },
+      { name: "Pricing", href: "#pricing" },
+      { name: "AI Tools", href: "#features" },
+      { name: "Affiliate Program", href: "#affiliate" },
+    ],
+    Company: [
+      { name: "About", href: "#" },
+      { name: "Support", href: "#" },
+      { name: "Terms of Service", href: "#" },
+      { name: "Privacy Policy", href: "#" },
+    ],
+    Connect: [
+      { name: "Instagram", href: "https://instagram.com/treasuretto" },
+      { name: "TikTok", href: "https://tiktok.com/@treasuretto" },
+      { name: "YouTube", href: "https://youtube.com/@treasuretto" },
+    ],
+  };
 
   return (
-    <>
-      {/* Mobile Toggle */}
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="fixed top-6 left-6 z-50 md:hidden p-2 bg-black/40 backdrop-blur-lg rounded-xl border border-[#d1b573]/30"
-      >
-        {menuOpen ? <X size={22} /> : <Menu size={22} />}
-      </button>
-
-      {/* Sidebar */}
-      <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: menuOpen || typeof window === "undefined" ? 0 : -300 }}
-        transition={{ type: "spring", stiffness: 90 }}
-        className={`fixed top-0 left-0 h-full w-64 bg-black/40 backdrop-blur-xl border-r border-[#d1b573]/20 shadow-[0_0_45px_rgba(209,181,115,0.2)] p-6 flex flex-col gap-10 z-40 md:translate-x-0 md:static`}
-      >
-        <div className="flex items-center gap-3">
+    <footer className="relative w-full bg-[#fafafa] border-t border-gray-200 mt-24 py-16 px-10 text-gray-600">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
+        <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
           <Image
             src="/images/logo.png"
-            alt="Vault OS"
-            width={34}
-            height={34}
-            className="rounded-full"
+            alt="Vault Logo"
+            width={48}
+            height={48}
+            className="object-contain"
           />
-          <span className="text-xl font-[Cinzel] tracking-wide text-[#f6e6b2]">
-            VAULT OS
-          </span>
         </div>
 
-        <nav className="flex flex-col gap-6 mt-4">
-          {navItems.map(({ name, icon: Icon }) => (
-            <Link
-              key={name}
-              href="#"
-              className="flex items-center gap-3 text-[#f6e6b2]/80 hover:text-[#f6e6b2] transition-all duration-200"
-            >
-              <Icon size={20} />
-              <span className="text-sm font-medium">{name}</span>
-            </Link>
-          ))}
-        </nav>
-
-        <div className="mt-auto">
-          <Link
-            href="#"
-            className="flex items-center gap-3 text-[#f6e6b2]/80 hover:text-[#f6e6b2] transition-all duration-200"
-          >
-            <LogOut size={20} />
-            <span className="text-sm font-medium">Logout</span>
-          </Link>
-        </div>
-      </motion.aside>
-    </>
-  );
-}
-
-/* ---------------- HERO ---------------- */
-function Hero({ username }: { username: string }) {
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 1 }}
-      className="relative min-h-[60vh] flex flex-col items-center justify-center text-center px-6 md:ml-64"
-    >
-      {/* Radial Glow */}
-      <motion.div
-        animate={{
-          scale: [1, 1.05, 1],
-          rotate: [0, 20, 0],
-          opacity: [0.6, 0.8, 0.6],
-        }}
-        transition={{ duration: 8, repeat: Infinity }}
-        className="absolute w-[500px] h-[500px] rounded-full bg-[#d1b573]/10 blur-3xl"
-      />
-      <div className="relative z-10">
-        <h1 className="font-[Cinzel] text-4xl md:text-5xl mb-4">
-          Welcome back, <span className="text-[#d1b573]">{username}</span>.
-        </h1>
-        <p className="text-[#f6e6b2]/70 max-w-2xl mx-auto text-lg">
-          Control your entire resale empire — listings, data, AI insights, and
-          education — all in one OS.
-        </p>
-      </div>
-    </motion.section>
-  );
-}
-
-/* ---------------- VAULT NEXUS ---------------- */
-function VaultNexus() {
-  const modules = [
-    { title: "Listing Optimizer", icon: Zap },
-    { title: "Price Predictor", icon: TrendingUp },
-    { title: "DM Script Engine", icon: BookOpen },
-    { title: "Profit Tracker", icon: Cpu },
-  ];
-
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 80 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="py-24 px-6 md:px-20 md:ml-64"
-    >
-      <h2 className="font-[Cinzel] text-3xl text-center mb-10">
-        Vault Nexus
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {modules.map(({ title, icon: Icon }) => (
-          <motion.div
-            key={title}
-            whileHover={{ y: -6, scale: 1.03 }}
-            className="bg-black/30 border border-[#d1b573]/20 rounded-2xl p-6 text-center shadow-[0_0_25px_rgba(209,181,115,0.1)] backdrop-blur-lg transition-all"
-          >
-            <Icon className="mx-auto mb-3 text-[#d1b573]" size={28} />
-            <h3 className="font-semibold">{title}</h3>
-          </motion.div>
+        {Object.entries(links).map(([title, items]) => (
+          <div key={title}>
+            <h4 className="text-[#0a0a0a] font-semibold mb-4">{title}</h4>
+            <ul className="space-y-2 text-[15px]">
+              {items.map((link, i) => (
+                <li key={i}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#A00028] transition"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
       </div>
-      <div className="flex justify-center mt-10">
-        <button className="px-6 py-3 rounded-xl border border-[#d1b573]/50 hover:bg-[#d1b573]/10 transition-all text-[#f6e6b2] font-medium">
-          Launch Nexus →
-        </button>
-      </div>
-    </motion.section>
-  );
-}
 
-/* ---------------- ACADEMY ---------------- */
-function Academy() {
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 80 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="py-28 px-6 md:px-20 text-center md:ml-64"
-    >
-      <div className="bg-gradient-to-br from-[#1a120c]/60 to-[#0b0603]/60 border border-[#d1b573]/20 rounded-2xl backdrop-blur-lg shadow-[0_0_40px_rgba(209,181,115,0.15)] p-12 max-w-3xl mx-auto">
-        <h2 className="font-[Cinzel] text-3xl mb-4 text-[#f6e6b2]">
-          The Academy
-        </h2>
-        <p className="text-[#f6e6b2]/70 mb-6">
-          Learn the secrets of top-tier resellers through guided modules and
-          case studies.
-        </p>
-        <button className="px-6 py-3 rounded-xl border border-[#d1b573]/50 hover:bg-[#d1b573]/10 transition-all text-[#f6e6b2] font-medium">
-          Enter The Academy →
-        </button>
+      <div className="border-t border-gray-200 mt-16 pt-6 text-center text-sm text-gray-400">
+        © {new Date().getFullYear()} The Vault by Treasuretto. All rights reserved.
       </div>
-    </motion.section>
-  );
-}
-
-/* ---------------- MARKET PULSE ---------------- */
-function MarketPulse() {
-  const data = [
-    "Nike Vintage +3.2%",
-    "Y2K Denim +1.8%",
-    "Carhartt Jackets -0.9%",
-    "Harley Tees +4.5%",
-  ];
-
-  return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 1 }}
-      className="overflow-hidden border-t border-b border-[#d1b573]/20 py-6 md:ml-64"
-    >
-      <div className="animate-marquee whitespace-nowrap text-center">
-        {Array(4)
-          .fill(data)
-          .flat()
-          .map((item, i) => (
-            <span
-              key={i}
-              className="inline-block mx-10 text-[#f6e6b2]/80 tracking-wide"
-            >
-              {item}
-            </span>
-          ))}
-      </div>
-      <style jsx>{`
-        .animate-marquee {
-          display: inline-block;
-          animation: marquee 18s linear infinite;
-        }
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
-    </motion.section>
-  );
-}
-
-/* ---------------- PARTNER PROGRAM ---------------- */
-function PartnerProgram() {
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="py-24 px-6 md:px-20 text-center md:ml-64"
-    >
-      <div className="max-w-2xl mx-auto">
-        <h2 className="font-[Cinzel] text-3xl mb-4 text-[#f6e6b2]">
-          Partner Program
-        </h2>
-        <p className="text-[#f6e6b2]/70 mb-8">
-          Earn 40% recurring commissions by referring other resellers.
-        </p>
-        <button className="px-8 py-3 rounded-xl border border-[#d1b573]/60 hover:bg-[#d1b573]/10 hover:shadow-[0_0_30px_rgba(209,181,115,0.3)] transition-all text-[#f6e6b2] font-medium">
-          Join Now →
-        </button>
-      </div>
-    </motion.section>
+    </footer>
   );
 }
