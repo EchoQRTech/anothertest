@@ -30,6 +30,7 @@ export default function VaultFormatter() {
   const brandRef = useRef<HTMLInputElement | null>(null);
   const shortRef = useRef<HTMLInputElement | null>(null);
   const sizeRef = useRef<HTMLInputElement | null>(null);
+  const measurementsRef = useRef<HTMLInputElement | null>(null); // ✅ Added Ref
   const conditionRef = useRef<HTMLInputElement | null>(null);
   const styleRef = useRef<HTMLInputElement | null>(null);
 
@@ -46,6 +47,7 @@ export default function VaultFormatter() {
     const brand = brandRef.current?.value?.trim() || "";
     const shortcontext = shortRef.current?.value?.trim() || "";
     const size = sizeRef.current?.value?.trim() || "";
+    const measurements = measurementsRef.current?.value?.trim() || ""; // ✅ Get Value
     const condition = conditionRef.current?.value?.trim() || "";
     const style = styleRef.current?.value?.trim() || "";
 
@@ -55,6 +57,7 @@ export default function VaultFormatter() {
 
     const details = [
       size && `• Size: ${size}`,
+      measurements && `• Measurements: ${measurements}`, // ✅ Added to details
       condition && `• Condition: ${condition}`,
       style && `• Style vibe: ${style}`,
     ]
@@ -68,13 +71,14 @@ export default function VaultFormatter() {
       .join(" ");
 
     const final = [
+      "Accepts all offers 🤝", // ✅ Added Top Line
       `**${title.trim()}**`,
       details,
       "Ships next day 📦 | DM me with questions 💬",
       tags,
     ]
       .filter(Boolean)
-      .join("\n");
+      .join("\n\n"); // Changed to \n\n for slightly better separation, or keep \n
 
     setOutput(final);
   };
@@ -97,7 +101,7 @@ export default function VaultFormatter() {
     label: string;
     placeholder: string;
     listId?: string;
-    inputRef: React.RefObject<HTMLInputElement | null>; // ✅ fixed type
+    inputRef: React.RefObject<HTMLInputElement | null>;
   }) {
     return (
       <div className="relative flex flex-col">
@@ -141,7 +145,13 @@ export default function VaultFormatter() {
           <Field label="Category" placeholder="e.g. Hoodie" listId="dl-category" inputRef={categoryRef}/>
           <Field label="Brand" placeholder="e.g. Nike" listId="dl-brand" inputRef={brandRef}/>
           <Field label="Short Context" placeholder="e.g. faded biker graphic" inputRef={shortRef}/>
-          <Field label="Size" placeholder="e.g. XL" listId="dl-size" inputRef={sizeRef}/>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Size" placeholder="e.g. XL" listId="dl-size" inputRef={sizeRef}/>
+            {/* ✅ Added Measurements Field */}
+            <Field label="Measurements" placeholder="e.g. 22x28" inputRef={measurementsRef}/>
+          </div>
+
           <Field label="Condition" placeholder="e.g. Good vintage condition" listId="dl-condition" inputRef={conditionRef}/>
           <Field label="Style" placeholder="e.g. Streetwear" listId="dl-style" inputRef={styleRef}/>
 
