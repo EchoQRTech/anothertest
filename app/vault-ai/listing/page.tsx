@@ -1,8 +1,8 @@
 "use client";
 import { useRef, useState, useEffect, useMemo } from "react";
-import { ChevronDown, Copy, Plus, Trash2, Download, CheckCircle, X, Package, Tag, Image as ImageIcon, Truck, Search, Sparkles, Edit3, BarChart3 } from "lucide-react";
+import { ChevronDown, Copy, Plus, Trash2, Download, CheckCircle, X, Package, Tag, Image as ImageIcon, Truck, Search, Sparkles, Edit3, BarChart3, Table, FileSpreadsheet, Save, XCircle } from "lucide-react";
 
-/* ---------- DEPOP TAXONOMY DATA (FULL RAW) ---------- */
+/* ---------- DEPOP TAXONOMY DATA ---------- */
 const depop = {
   categories: [
     "Women >> Tops >> T-shirts (womenswear, tops, tshirts)",
@@ -67,19 +67,6 @@ const depop = {
     "Women >> Accessories >> Socks (womenswear, accessories, socks)",
     "Women >> Accessories >> Tights (womenswear, accessories, tights)",
     "Women >> Accessories >> Other (womenswear, accessories, other-accessories)",
-    "Women >> Swimwear >> Bikini and tankini sets (womenswear, swim-beach-wear, bikinis-and-tankini-sets)",
-    "Women >> Swimwear >> Bikini and tankini tops (womenswear, swim-beach-wear, bikini-and-tankini-tops)",
-    "Women >> Swimwear >> Bikini and tankini bottoms (womenswear, swim-beach-wear, bikini-and-tankini-bottoms)",
-    "Women >> Swimwear >> Swimsuits (womenswear, swim-beach-wear, swimsuit-one-piece)",
-    "Women >> Swimwear >> Cover ups (womenswear, swim-beach-wear, cover-ups)",
-    "Women >> Swimwear >> Other (womenswear, swim-beach-wear, other-swim-beach-wear)",
-    "Women >> Sleepwear >> Pajamas (womenswear, nightwear, pajamas)",
-    "Women >> Sleepwear >> Robes (womenswear, nightwear, robes)",
-    "Women >> Sleepwear >> Lingerie sets (womenswear, lingerie, lingerie-sets)",
-    "Women >> Sleepwear >> Bras (womenswear, lingerie, bras)",
-    "Women >> Sleepwear >> Panties (womenswear, lingerie, panties)",
-    "Women >> Sleepwear >> Shapewear (womenswear, lingerie, shapewear)",
-    "Women >> Sleepwear >> Other (womenswear, lingerie, other-lingerie)",
     "Men >> Tops >> T-shirts (menswear, tops, tshirts)",
     "Men >> Tops >> Polos (menswear, tops, polo-shirts)",
     "Men >> Tops >> Shirts (menswear, tops, shirts)",
@@ -127,49 +114,6 @@ const depop = {
     "Men >> Accessories >> Socks (menswear, underwear, socks)",
     "Men >> Accessories >> Underwear (menswear, underwear, boxers-and-briefs)",
     "Men >> Accessories >> Other (menswear, accessories, other-accessories)",
-    "Men >> Suits >> Suits (menswear, suits, suits)",
-    "Men >> Suits >> Tuxedos (menswear, suits, tuxedos)",
-    "Men >> Suits >> Other (menswear, suits, other-suits)",
-    "Kids >> Clothing >> Tops (kidswear, tops, tshirts)",
-    "Kids >> Clothing >> Bottoms (kidswear, bottoms, trousers)",
-    "Kids >> Clothing >> Dresses (kidswear, dresses, dresses)",
-    "Kids >> Clothing >> Outerwear (kidswear, coats-jackets, coats)",
-    "Kids >> Clothing >> Sleepwear (kidswear, nightwear, pajamas)",
-    "Kids >> Clothing >> Swimwear (kidswear, swim-beach-wear, swim-briefs-shorts)",
-    "Kids >> Clothing >> Costumes (kidswear, costume, costume)",
-    "Kids >> Footwear >> Sneakers (kidswear, footwear, trainers)",
-    "Kids >> Footwear >> Boots (kidswear, footwear, boots)",
-    "Kids >> Footwear >> Sandals (kidswear, footwear, sandals)",
-    "Kids >> Footwear >> Other (kidswear, footwear, other-footwear)",
-    "Kids >> Accessories >> Hats (kidswear, accessories, hat)",
-    "Kids >> Accessories >> Bags (kidswear, accessories, bag)",
-    "Kids >> Accessories >> Other (kidswear, accessories, other-accessories)",
-    "Everything else >> Art >> Prints (everything-else, art, prints)",
-    "Everything else >> Art >> Photography (everything-else, art, photography)",
-    "Everything else >> Art >> Paintings (everything-else, art, paintings)",
-    "Everything else >> Art >> Drawings (everything-else, art, drawing-and-illustrations)",
-    "Everything else >> Art >> Sculptures (everything-else, art, sculptures)",
-    "Everything else >> Art >> Other (everything-else, art, mixed-media)",
-    "Everything else >> Home >> Decor (everything-else, home, decor-home-accesories)",
-    "Everything else >> Home >> Bedding (everything-else, home, soft-furnishings-textiles)",
-    "Everything else >> Home >> Kitchenware (everything-else, home, dinnerware)",
-    "Everything else >> Home >> Lighting (everything-else, home, lighting)",
-    "Everything else >> Home >> Textiles (everything-else, home, soft-furnishings-textiles)",
-    "Everything else >> Home >> Other (everything-else, home, other-home)",
-    "Everything else >> Tech >> Cameras (everything-else, film, cameras-and-accessories)",
-    "Everything else >> Tech >> Phone cases (everything-else, tech-accessories, phone-cases)",
-    "Everything else >> Tech >> Audio (everything-else, music, cds-and-vinyl)",
-    "Everything else >> Tech >> Gaming (everything-else, toys, puzzles-games)",
-    "Everything else >> Tech >> Other (everything-else, tech-accessories, other-tech)",
-    "Everything else >> Beauty >> Makeup (everything-else, beauty, makeup)",
-    "Everything else >> Beauty >> Skincare (everything-else, beauty, skincare)",
-    "Everything else >> Beauty >> Haircare (everything-else, beauty, hair-products)",
-    "Everything else >> Beauty >> Fragrance (everything-else, beauty, fragrance)",
-    "Everything else >> Beauty >> Tools (everything-else, beauty, tools-and-brushes)",
-    "Everything else >> Beauty >> Other (everything-else, beauty, other-beauty)",
-    "Everything else >> Sports >> Equipment (everything-else, sports-equipment-accesories, fitness)",
-    "Everything else >> Sports >> Accessories (everything-else, sports-equipment-accesories, camping-hiking)",
-    "Everything else >> Sports >> Other (everything-else, sports-equipment-accesories, other-sports)",
     "Everything else >> Other (everything-else, other, other)"
   ],
   sizes: [
@@ -181,10 +125,7 @@ const depop = {
     "L28", "L29", "L30", "L31", "L32", "L33", "L34", "L36",
     "US 4 (Shoe)", "US 5 (Shoe)", "US 5.5 (Shoe)", "US 6 (Shoe)", "US 6.5 (Shoe)", "US 7 (Shoe)", "US 7.5 (Shoe)",
     "US 8 (Shoe)", "US 8.5 (Shoe)", "US 9 (Shoe)", "US 9.5 (Shoe)", "US 10 (Shoe)", "US 10.5 (Shoe)",
-    "US 11 (Shoe)", "US 11.5 (Shoe)", "US 12 (Shoe)", "US 12.5 (Shoe)", "US 13 (Shoe)", "US 14 (Shoe)", "US 15 (Shoe)",
-    "Baby 0-3M", "Baby 3-6M", "Baby 6-9M", "Baby 9-12M", "Toddler 12-18M", "Toddler 18-24M", "Toddler 2T",
-    "Toddler 3T", "Toddler 4T",
-    "Kids 4", "Kids 5", "Kids 6", "Kids 6X", "Kids 7", "Kids 8", "Kids 10", "Kids 12", "Kids 14", "Kids 16", "Kids 18", "Kids 20"
+    "US 11 (Shoe)", "US 11.5 (Shoe)", "US 12 (Shoe)", "US 12.5 (Shoe)", "US 13 (Shoe)", "US 14 (Shoe)", "US 15 (Shoe)"
   ],
   brands: [
     "Adidas (adidas)", "Nike (nike)", "Zara (zara)", "H&M (h-m)", "Levi's (levi-s)", "Champion (champion)", "Vintage (vintage)", "Unbranded (unbranded)", 
@@ -197,36 +138,7 @@ const depop = {
     "Lululemon (lululemon)", "Athleta (athleta)", "Fabletics (fabletics)", "Alo Yoga (alo-yoga)", "Free People (free-people)", "Anthropologie (anthropologie)",
     "Madewell (madewell)", "J.Crew (jcrew)", "Banana Republic (banana-republic)", "Gap (gap)", "Old Navy (old-navy)", "Abercrombie & Fitch (abercrombie-fitch)", 
     "Hollister (hollister-co)", "American Eagle (american-eagle)", "Aeropostale (aeropostale)", "PacSun (pacsun)",
-    "Zumiez (zumiez)", "Hot Topic (hot-topic)", "Dolls Kill (dolls-kill)", "Killstar (killstar)", "Tripp NYC (tripp-nyc)", "Demonia (demonia)", 
-    "Y.R.U. (yru)", "Iron Fist (iron-fist)", "Lip Service (lip-service)", "Royal Bones (royal-bones)", "Hell Bunny (hell-bunny)",
-    "Sourpuss (sourpuss-clothing)", "Kreepsville 666 (kreepsville-666)", "Too Fast (too-fast)", "Banned Apparel (banned-apparel)", "Restyle (restyle)", 
-    "Punk Rave (punk-rave)", "Dark in Love (dark-in-love)", "Spin Doctor (spin-doctor)", "Jawbreaker (jawbreaker)", "Vixxsin (vixxsin)",
-    "Poizen Industries (poizen-industries)", "Necessary Evil (necessary-evil)", "Queen of Darkness (queen-of-darkness)", "Devil Fashion (devil-fashion)", 
-    "Burleska (burleska)", "Phaze (phaze-clothing)", "Criminal Damage (criminal-damage)", "Disturbia (disturbia)", "Drop Dead (dropdead)",
-    "Blackcraft Cult (blackcraft-cult)", "Rogue & Wolf (rogue-wolf)", "Widow (widow)", "Current Mood (current-mood)", "Club Exx (club-exx)", 
-    "Sugarpill (sugarpill)", "Lime Crime (lime-crime)", "Jeffree Star Cosmetics (jeffree-star)", "Morphe (morphe)",
-    "ColourPop (colourpop)", "Anastasia Beverly Hills (anastasia-beverly-hills)", "Tarte (tarte)", "Too Faced (too-faced)", "Urban Decay (urban-decay)", 
-    "Benefit (benefit)", "MAC (mac)", "NARS (nars)", "Fenty Beauty (fenty-beauty)", "Kylie Cosmetics (kylie-cosmetics)",
-    "Glossier (glossier)", "Milk Makeup (milk-makeup)", "The Ordinary (the-ordinary)", "Mario Badescu (mario-badescu)", "Drunk Elephant (drunk-elephant)", 
-    "Tatcha (tatcha)", "Sunday Riley (sunday-riley)", "Herbivore (herbivore)", "Ouai (ouai)", "Olaplex (olaplex)",
-    "Briogeo (briogeo)", "Living Proof (living-proof)", "Bumble and bumble (bumble-and-bumble)", "Drybar (drybar)", "GHD (ghd)", "Dyson (dyson)", 
-    "Apple (apple)", "Samsung (samsung)", "Sony (sony)", "Nintendo (nintendo)", "Canon (canon)", "Nikon (nikon)", "Fujifilm (fujifilm)",
-    "Polaroid (polaroid)", "Kodak (kodak)", "GoPro (gopro)", "Fitbit (fitbit)", "Garmin (garmin)", "Beats by Dre (beats-by-dre)", "Bose (bose)", 
-    "JBL (jbl)", "Skullcandy (skullcandy)", "Marshall (marshall)", "Crosley (crosley)", "Audio-Technica (audio-technica)", "Razer (razer)",
-    "Logitech (logitech)", "Corsair (corsair)", "SteelSeries (steelseries)", "HyperX (hyperx)", "Funko (funko)", "Lego (lego)", "Barbie (barbie)", 
-    "Squishmallows (squishmallows)", "Jellycat (jellycat)", "Sanrio (sanrio)", "Pokemon (pokemon)", "Yu-Gi-Oh! (yu-gi-oh)",
-    "Magic: The Gathering (magic-the-gathering)", "Dungeons & Dragons (dungeons-dragons)", "Warhammer (warhammer)", "Hasbro (hasbro)", 
-    "Mattel (mattel)", "Fisher-Price (fisher-price)", "Nerf (nerf)", "Hot Wheels (hot-wheels)", "Marvel (marvel)", "DC Comics (dc-comics)",
-    "Star Wars (star-wars)", "Harry Potter (harry-potter)", "Lord of the Rings (lord-of-the-rings)", "Game of Thrones (game-of-thrones)", 
-    "Stranger Things (stranger-things)", "Friends (friends)", "The Office (the-office)", "Rick and Morty (rick-and-morty)",
-    "SpongeBob SquarePants (spongebob-squarepants)", "The Simpsons (the-simpsons)", "Family Guy (family-guy)", "South Park (south-park)", 
-    "Anime (anime)", "Manga (manga)", "K-Pop (k-pop)", "BTS (bts)", "Blackpink (blackpink)", "Stray Kids (stray-kids)", "Twice (twice)",
-    "NCT (nct)", "Seventeen (seventeen)", "TXT (txt)", "Enhypen (enhypen)", "Ateez (ateez)", "Itzy (itzy)", "Red Velvet (red-velvet)", 
-    "Aespa (aespa)", "NewJeans (newjeans)", "Ive (ive)", "Le Sserafim (le-sserafim)", "Stayc (stayc)", "Nmixx (nmixx)", "Kep1er (kep1er)",
-    "Loona (loona)", "Dreamcatcher (dreamcatcher)", "Mamamoo (mamamoo)", "G-Idle (g-idle)", "Everglow (everglow)", "Fromis_9 (fromis_9)", 
-    "WJSN (wjsn)", "Cherry Bullet (cherry-bullet)", "Rocket Punch (rocket-punch)", "Weeekly (weeekly)", "Woo!ah! (woo-ah)", "Lightsum (lightsum)",
-    "Billlie (billlie)", "Viviz (viviz)", "Class:y (class-y)", "NiziU (niziu)", "XG (xg)", "Fifty Fifty (fifty-fifty)", "TripleS (triples)", 
-    "Kiss of Life (kiss-of-life)", "BabyMonster (babymonster)", "Other (unbranded)", "Fruit of The Loom (fruit-of-the-loom)", "NFL (nfl)"
+    "Other (unbranded)", "Fruit of The Loom (fruit-of-the-loom)", "NFL (nfl)", "NASCAR (nascar)", "Jerzees (jerzees)", "Billabong (billabong)", "NBA (nba)", "Pro PLayer (pro-player)"
   ],
   conditions: [
     "Brand new (brand_new)", "Like new (used_like_new)", "Used - Excellent (used_excellent)", "Used - Good (used_good)", "Used - Fair (used_fair)"
@@ -282,6 +194,8 @@ interface BatchItem {
   pic4: string;
   domesticShipping: string;
   internationalShipping: string;
+  rawShortContext?: string; // Stored for editing
+  measurements?: string; // Stored for editing
 }
 
 /* ---------- UI COMPONENT: INTELLIGENT SEARCHABLE SELECT ---------- */
@@ -304,77 +218,56 @@ function SearchableSelect({
   const [inputValue, setInputValue] = useState(value); 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // HELPER: Strips the slug for display (e.g. "Nike (nike)" -> "Nike")
   const cleanDisplayValue = (val: string) => val ? val.split(" (")[0] : "";
 
-  // Sync displayed text (cleaned) ONLY when dropdown is closed to prevent fighting user input
+  // Sync displayed text when value prop changes (critical for edit mode)
   useEffect(() => {
-    if (!isOpen) {
-        setInputValue(cleanDisplayValue(value));
-    }
-  }, [value, isOpen]);
+    setInputValue(cleanDisplayValue(value));
+  }, [value]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        // On close, revert input to match selected value
+        setInputValue(cleanDisplayValue(value));
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [value]);
 
-  // --- IMPROVED FILTERING LOGIC ---
   const filteredOptions = useMemo(() => {
     if (!inputValue) return options;
-    
-    // 1. Tokenize Input (e.g. "hoodie men" -> ["hoodie", "men"])
     const searchTerms = inputValue.toLowerCase().split(" ").filter(t => t.trim());
-    
-    // 2. Filter: Option must contain ALL tokens
     const filtered = options.filter((opt) => {
         const lowerOpt = opt.toLowerCase();
         return searchTerms.every(term => lowerOpt.includes(term));
     });
-
-    // 3. Sort: Prioritize options that START with the first search term
-    // This ensures "Men" comes before "Women" (because women contains men)
     return filtered.sort((a, b) => {
         const aLower = a.toLowerCase();
         const bLower = b.toLowerCase();
         const firstTerm = searchTerms[0] || "";
-        
         const aStarts = aLower.startsWith(firstTerm);
         const bStarts = bLower.startsWith(firstTerm);
-
         if (aStarts && !bStarts) return -1;
         if (!aStarts && bStarts) return 1;
         return 0;
     });
-
   }, [inputValue, options]);
 
   const handleSelect = (opt: string) => {
-    onChange(opt); // CRITICAL: Saves FULL string to state
-    setInputValue(cleanDisplayValue(opt)); // Updates Input to CLEAN string
+    onChange(opt);
+    setInputValue(cleanDisplayValue(opt));
     setIsOpen(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setInputValue(e.target.value);
-      if (!isOpen) setIsOpen(true);
-  };
-
-  // --- CLEAN ITEM RENDERER ---
-  // Parses complex Depop strings into Clean Title + Subtitle
   const renderOption = (opt: string) => {
-      const cleanOpt = opt.split(" (")[0]; // Remove (slug)
-      
+      const cleanOpt = opt.split(" (")[0];
       if (cleanOpt.includes(" >> ")) {
           const parts = cleanOpt.split(" >> ");
-          const mainItem = parts.pop(); // "T-shirts"
-          const path = parts.join(" > "); // "Women > Tops"
-          
+          const mainItem = parts.pop();
+          const path = parts.join(" > ");
           return (
               <div className="flex flex-col">
                   <span className="font-bold text-gray-800 text-sm">{mainItem}</span>
@@ -382,14 +275,12 @@ function SearchableSelect({
               </div>
           );
       }
-      // For brands/styles without >>
       return <span className="font-medium text-gray-700">{cleanOpt}</span>;
   };
 
   return (
     <div className="relative flex flex-col w-full" ref={containerRef} style={{ zIndex: isOpen ? zIndex + 50 : zIndex }}>
       {label && <label className="text-[10px] font-extrabold text-gray-400 mb-1.5 uppercase tracking-widest">{label}</label>}
-      
       <div className="relative">
         <input
           type="text"
@@ -398,10 +289,9 @@ function SearchableSelect({
           `}
           placeholder={placeholder}
           value={inputValue} 
-          onChange={handleInputChange}
+          onChange={(e) => { setInputValue(e.target.value); setIsOpen(true); }}
           onClick={() => setIsOpen(true)}
         />
-        
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
             {inputValue && (
                 <button 
@@ -419,8 +309,6 @@ function SearchableSelect({
             <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
         </div>
       </div>
-
-      {/* DROPDOWN MENU */}
       {isOpen && filteredOptions.length > 0 && (
         <div className="absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-xl border border-gray-200/50 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] max-h-60 overflow-y-auto custom-scrollbar animate-in fade-in zoom-in-95 duration-200 p-1.5">
           {filteredOptions.map((opt, idx) => (
@@ -441,16 +329,18 @@ function SearchableSelect({
   );
 }
 
-/* ---------- UI COMPONENT: STANDARD INPUT ---------- */
+/* ---------- UI COMPONENT: STANDARD INPUT (Refactored for Edit Support) ---------- */
 function TextInput({
   label,
   placeholder,
-  inputRef,
+  value,
+  onChange,
   prefix
 }: {
   label?: string;
   placeholder: string;
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   prefix?: string;
 }) {
   return (
@@ -463,9 +353,10 @@ function TextInput({
             </div>
         )}
         <input
-          ref={inputRef}
           type="text"
           placeholder={placeholder}
+          value={value}
+          onChange={onChange}
           className={`w-full py-3.5 bg-white border border-gray-200 text-sm font-medium text-gray-800 placeholder-gray-300 outline-none rounded-2xl transition-all shadow-sm
             hover:border-[#A00028]/40 hover:shadow-md
             focus:border-[#A00028] focus:ring-2 focus:ring-[#A00028]/10
@@ -478,70 +369,56 @@ function TextInput({
 }
 
 export default function VaultBatchSystem() {
-  /* ---------- STATE ---------- */
-  const [era, setEra] = useState("");
-  const [category, setCategory] = useState("");
-  const [brand, setBrand] = useState("");
-  const [size, setSize] = useState("");
-  const [condition, setCondition] = useState("");
-  const [color1, setColor1] = useState("");
-  const [color2, setColor2] = useState("");
-  const [source1, setSource1] = useState("");
-  const [location, setLocation] = useState("");
-  const [style1, setStyle1] = useState("");
-  const [style2, setStyle2] = useState("");
-  const [style3, setStyle3] = useState("");
-  const [seoScore, setSeoScore] = useState(0);
-
-  /* ---------- REFS ---------- */
-  const shortRef = useRef<HTMLInputElement | null>(null);
-  const priceRef = useRef<HTMLInputElement | null>(null);
-  const measurementsRef = useRef<HTMLInputElement | null>(null);
-  const domesticShipRef = useRef<HTMLInputElement | null>(null);
-  const intShipRef = useRef<HTMLInputElement | null>(null);
-  const pic1Ref = useRef<HTMLInputElement | null>(null);
-  const pic2Ref = useRef<HTMLInputElement | null>(null);
-  const pic3Ref = useRef<HTMLInputElement | null>(null);
-  const pic4Ref = useRef<HTMLInputElement | null>(null);
-
-  /* ---------- BATCH STATE ---------- */
+  /* ---------- GLOBAL STATE ---------- */
   const [batch, setBatch] = useState<BatchItem[]>([]);
-  const [output, setOutput] = useState(""); 
-  const [isOutputDirty, setIsOutputDirty] = useState(false); 
-  const [copied, setCopied] = useState(false); 
-  const [msg, setMsg] = useState(""); 
+  const [msg, setMsg] = useState("");
+  const [previewTab, setPreviewTab] = useState<"cards" | "csv">("cards");
+  const [editingItem, setEditingItem] = useState<BatchItem | null>(null);
 
-  /* ---------- LOGIC ---------- */
+  /* ---------- FORM STATE (Main & Edit) ---------- */
+  // Use a customized hook or object to manage form state to easily swap between "Create" and "Edit" modes
+  const [formState, setFormState] = useState({
+    era: "", category: "", brand: "", size: "", condition: "",
+    color1: "", color2: "", source1: "", location: "",
+    style1: "", style2: "", style3: "",
+    shortContext: "", price: "", measurements: "",
+    domesticShip: "", intShip: "",
+    pic1: "", pic2: "", pic3: "", pic4: "",
+    output: "", isOutputDirty: false
+  });
+
+  const [seoScore, setSeoScore] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  /* ---------- LOGIC: DESCRIPTION GENERATOR ---------- */
   const cleanVal = (val: string) => val.split(" (")[0].split(" >> ").pop() || val;
 
   // --- LIVE SEO SCORING ---
   useEffect(() => {
     let score = 0;
-    if (category) score += 15;
-    if (brand) score += 15;
-    if (size) score += 15;
-    if (condition) score += 10;
-    if (style1) score += 10; // Vibe is important
+    if (formState.category) score += 15;
+    if (formState.brand) score += 15;
+    if (formState.size) score += 15;
+    if (formState.condition) score += 10;
+    if (formState.style1) score += 10; 
     
-    // Title Length Check
-    const titleParts = [era, brand, category, shortRef.current?.value].filter(Boolean).join(" ");
+    const titleParts = [formState.era, formState.brand, formState.category, formState.shortContext].filter(Boolean).join(" ");
     if (titleParts.length > 30) score += 15;
     
-    // Image Check
-    if (pic1Ref.current?.value) score += 20;
+    if (formState.pic1) score += 20;
 
     setSeoScore(Math.min(100, score));
-  }, [category, brand, size, condition, style1, era, isOutputDirty]);
+  }, [formState]);
 
-
-  const generateDescriptionString = () => {
-    const rawShortContext = shortRef.current?.value?.trim() || "";
-    const measurements = measurementsRef.current?.value?.trim() || "";
+  // --- GENERATOR FUNCTION ---
+  const generateDescriptionString = (state: typeof formState) => {
+    const rawShortContext = state.shortContext?.trim() || "";
+    const measurements = state.measurements?.trim() || "";
     
-    const finalEra = cleanVal(era);
-    const finalBrand = cleanVal(brand);
+    const finalEra = cleanVal(state.era);
+    const finalBrand = cleanVal(state.brand);
     
-    // --- 1. SINGULARIZATION LOGIC (Title) ---
+    // Singularization
     const getSingularCategory = (catString: string) => {
         const clean = cleanVal(catString);
         const lower = clean.toLowerCase();
@@ -554,9 +431,9 @@ export default function VaultBatchSystem() {
         return clean;
     };
 
-    const finalCategory = getSingularCategory(category);
+    const finalCategory = getSingularCategory(state.category);
 
-    // --- 2. DEDUPLICATION LOGIC (Title) ---
+    // Deduplication
     let optimizedContext = rawShortContext;
     if (finalBrand) optimizedContext = optimizedContext.replace(new RegExp(`\\b${finalBrand}\\b`, 'gi'), "");
     if (finalCategory) optimizedContext = optimizedContext.replace(new RegExp(`\\b${finalCategory}\\b`, 'gi'), "");
@@ -564,38 +441,31 @@ export default function VaultBatchSystem() {
     optimizedContext = optimizedContext.replace(/\s+/g, " ").trim();
 
     const title = [
-        finalEra, 
-        finalBrand, 
-        finalCategory, 
-        optimizedContext,
-        size && `- Size ${size}` 
+        finalEra, finalBrand, finalCategory, optimizedContext,
+        state.size && `- Size ${state.size}` 
     ].filter(Boolean).join(" ");
     
-    // --- COMPACT DETAILS ---
     const details = [
-      size && `• Size: ${size}`,
+      state.size && `• Size: ${state.size}`,
       measurements && `• Measurements: ${measurements}`,
-      condition && `• Condition: ${cleanVal(condition)}`,
-      (style1 || style2) && `• Style: ${[cleanVal(style1), cleanVal(style2)].filter(Boolean).join(", ")}`,
+      state.condition && `• Condition: ${cleanVal(state.condition)}`,
+      (state.style1 || state.style2) && `• Style: ${[cleanVal(state.style1), cleanVal(state.style2)].filter(Boolean).join(", ")}`,
     ].filter(Boolean).join("\n");
 
-    // --- 3. SMART HASHTAG LOGIC (With High-Quality Fallbacks) ---
-    
-    // A. Brand Vibe Mapper
+    // Hashtags
     const getBrandVibe = (b: string) => {
         const lower = b.toLowerCase();
-        if (lower.includes("nike") || lower.includes("adidas") || lower.includes("puma") || lower.includes("champion") || lower.includes("fila") || lower.includes("reebok") || lower.includes("under armour") || lower.includes("north face")) return "gorpcore";
-        if (lower.includes("carhartt") || lower.includes("dickies") || lower.includes("wrangler")) return "workwear";
-        if (lower.includes("stussy") || lower.includes("supreme") || lower.includes("palace") || lower.includes("vans") || lower.includes("thrasher")) return "streetwear";
-        if (lower.includes("tripp") || lower.includes("lip service") || lower.includes("killstar") || lower.includes("demon")) return "goth";
-        if (lower.includes("harley")) return "biker";
-        if (lower.includes("north face") || lower.includes("patagonia") || lower.includes("columbia") || lower.includes("arc'teryx")) return "gorpcore";
-        if (lower.includes("abercrombie") || lower.includes("hollister") || lower.includes("juicy") || lower.includes("von dutch") || lower.includes("ed hardy")) return "y2k";
-        if (lower.includes("lauren") || lower.includes("tommy") || lower.includes("nautica") || lower.includes("lacoste")) return "preppy";
+        if (lower.match(/nike|adidas|puma|champion|fila|reebok|under armour|north face/)) return "gorpcore";
+        if (lower.match(/carhartt|dickies|wrangler/)) return "workwear";
+        if (lower.match(/stussy|supreme|palace|vans|thrasher/)) return "streetwear";
+        if (lower.match(/tripp|lip service|killstar|demon/)) return "goth";
+        if (lower.match(/harley/)) return "biker";
+        if (lower.match(/north face|patagonia|columbia|arc'teryx/)) return "gorpcore";
+        if (lower.match(/abercrombie|hollister|juicy|von dutch|ed hardy/)) return "y2k";
+        if (lower.match(/lauren|tommy|nautica|lacoste/)) return "preppy";
         return "";
     };
 
-    // B. Category Synonyms (High-Value Fallbacks)
     const getCategorySynonyms = (cat: string) => {
         const lower = cat.toLowerCase();
         if(lower.includes("hoodie")) return ["hoodie", "sweatshirt"];
@@ -603,146 +473,261 @@ export default function VaultBatchSystem() {
         if(lower.includes("jeans") || lower.includes("pants")) return ["denim", "trousers"];
         if(lower.includes("jacket") || lower.includes("coat")) return ["jacket", "outerwear"];
         if(lower.includes("sweater")) return ["jumper", "knit"];
-        if(lower.includes("dress")) return ["dress", "summer"];
         return [];
     };
 
-    // C. Is it actually vintage?
     const isVintageEra = ["90s", "80s", "70s", "60s", "50s", "antique", "y2k"].some(e => finalEra.toLowerCase().includes(e));
 
-    // D. Construct Tags (Priority Order)
     const potentialTags = [
-        cleanVal(style1), 
-        cleanVal(style2), 
-        cleanVal(style3), 
+        cleanVal(state.style1), cleanVal(state.style2), cleanVal(state.style3), 
         getBrandVibe(finalBrand), 
         isVintageEra ? "vintage" : "",
         finalEra.toLowerCase(), 
-        cleanVal(condition).includes("Brand new") ? "deadstock" : "",
-        ...getCategorySynonyms(category), // Add synonym fallbacks
-        "streetwear", // Strong generic fallback
-        "fashion",
-        "style"
+        cleanVal(state.condition).includes("Brand new") ? "deadstock" : "",
+        ...getCategorySynonyms(state.category),
+        "streetwear", "fashion", "style"
     ];
 
-    const tags = Array.from(new Set(potentialTags)) // Unique only
-      .filter(Boolean) // Remove empty
+    const tags = Array.from(new Set(potentialTags))
+      .filter(Boolean)
       .map((t) => "#" + t?.replace(/\s+/g, "").toLowerCase())
-      .slice(0, 5) // Strict Max 5
+      .slice(0, 5)
       .join(" ");
 
-    // TIGHT SPACING RETURN (Single \n)
     return [title, details, "Ships next day 📦 | DM me with questions 💬", tags].filter(Boolean).join("\n");
   };
 
-  const handlePreview = (e: React.FormEvent) => {
-      e.preventDefault();
-      const generated = generateDescriptionString();
-      setOutput(generated);
-      setIsOutputDirty(true); 
+  /* ---------- EVENT HANDLERS ---------- */
+  const handleUpdateField = (field: string, value: any) => {
+    setFormState(prev => {
+        const newState = { ...prev, [field]: value };
+        // Auto-update output if dirty not explicitly set (simple mode)
+        if(!prev.isOutputDirty) {
+            newState.output = generateDescriptionString(newState);
+        }
+        return newState;
+    });
   };
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setOutput(e.target.value);
-      setIsOutputDirty(true); 
+  const handlePreview = () => {
+      const generated = generateDescriptionString(formState);
+      handleUpdateField("output", generated);
+      handleUpdateField("isOutputDirty", true);
   };
 
-  // --- CLEAR FUNCTION ---
-  const handleClearForm = (e?: React.MouseEvent) => {
-      if (e) e.preventDefault(); 
-
-      // 1. Reset State Variables
-      setEra(""); setCategory(""); setBrand(""); setSize(""); 
-      setCondition(""); setColor1(""); setColor2(""); setSource1(""); 
-      setLocation(""); setStyle1(""); setStyle2(""); setStyle3("");
-      
-      // 2. Reset Ref Values
-      [shortRef, priceRef, measurementsRef, domesticShipRef, intShipRef, pic1Ref, pic2Ref, pic3Ref, pic4Ref].forEach(ref => {
-          if (ref.current) ref.current.value = "";
+  const handleClearForm = () => {
+      setFormState({
+        era: "", category: "", brand: "", size: "", condition: "",
+        color1: "", color2: "", source1: "", location: "",
+        style1: "", style2: "", style3: "",
+        shortContext: "", price: "", measurements: "",
+        domesticShip: "", intShip: "",
+        pic1: "", pic2: "", pic3: "", pic4: "",
+        output: "", isOutputDirty: false
       });
-      
-      // 3. Reset Output
-      setOutput("");
-      setIsOutputDirty(false);
       setSeoScore(0);
-      
-      // 4. Feedback
-      setMsg("Form Cleared"); 
+      setMsg("Form Cleared");
       setTimeout(()=>setMsg(""), 1000);
   };
 
   const handleAddToBatch = () => {
-    if (!category) {
+    if (!formState.category) {
         setMsg("Category required"); 
         setTimeout(()=>setMsg(""), 2000); 
         return; 
     }
 
-    const finalDescription = isOutputDirty ? output : generateDescriptionString();
+    const finalDescription = formState.isOutputDirty ? formState.output : generateDescriptionString(formState);
 
     const newItem: BatchItem = {
       id: crypto.randomUUID(),
       description: finalDescription,
-      category, 
-      price: priceRef.current?.value || "", 
-      brand, 
-      condition, 
-      size,
-      color1, 
-      color2, 
-      source1, 
+      category: formState.category, 
+      price: formState.price, 
+      brand: formState.brand, 
+      condition: formState.condition, 
+      size: formState.size,
+      color1: formState.color1, 
+      color2: formState.color2, 
+      source1: formState.source1, 
       source2: "", 
-      age: era,
-      style1, 
-      style2, 
-      style3, 
-      location,
-      pic1: pic1Ref.current?.value || "", 
-      pic2: pic2Ref.current?.value || "",
-      pic3: pic3Ref.current?.value || "", 
-      pic4: pic4Ref.current?.value || "",
-      domesticShipping: domesticShipRef.current?.value || "",
-      internationalShipping: intShipRef.current?.value || "",
+      age: formState.era,
+      style1: formState.style1, 
+      style2: formState.style2, 
+      style3: formState.style3, 
+      location: formState.location,
+      pic1: formState.pic1, pic2: formState.pic2, pic3: formState.pic3, pic4: formState.pic4,
+      domesticShipping: formState.domesticShip,
+      internationalShipping: formState.intShip,
+      rawShortContext: formState.shortContext,
+      measurements: formState.measurements
     };
     setBatch(prev => [...prev, newItem]);
+    handleClearForm();
     setMsg("Added to Batch!");
     setTimeout(()=>setMsg(""), 2000);
   };
 
+  // --- EDIT MODAL HANDLERS ---
+  const openEditModal = (item: BatchItem) => {
+    setEditingItem(item);
+    // Populate form state from item
+    setFormState({
+        era: item.age, category: item.category, brand: item.brand, size: item.size, condition: item.condition,
+        color1: item.color1, color2: item.color2, source1: item.source1, location: item.location,
+        style1: item.style1, style2: item.style2, style3: item.style3,
+        shortContext: item.rawShortContext || "", price: item.price, measurements: item.measurements || "",
+        domesticShip: item.domesticShipping, intShip: item.internationalShipping,
+        pic1: item.pic1, pic2: item.pic2, pic3: item.pic3, pic4: item.pic4,
+        output: item.description, isOutputDirty: true
+    });
+  };
+
+  const saveEditedItem = () => {
+      if(!editingItem) return;
+      
+      const updatedItem: BatchItem = {
+          ...editingItem,
+          description: formState.output,
+          category: formState.category,
+          price: formState.price,
+          brand: formState.brand,
+          condition: formState.condition,
+          size: formState.size,
+          color1: formState.color1,
+          color2: formState.color2,
+          source1: formState.source1,
+          age: formState.era,
+          style1: formState.style1, style2: formState.style2, style3: formState.style3,
+          location: formState.location,
+          pic1: formState.pic1, pic2: formState.pic2, pic3: formState.pic3, pic4: formState.pic4,
+          domesticShipping: formState.domesticShip,
+          internationalShipping: formState.intShip,
+          rawShortContext: formState.shortContext,
+          measurements: formState.measurements
+      };
+
+      setBatch(prev => prev.map(item => item.id === editingItem.id ? updatedItem : item));
+      setEditingItem(null);
+      handleClearForm(); // Reset form after edit so main form is clean
+      setMsg("Item Updated");
+      setTimeout(()=>setMsg(""), 2000);
+  };
+
   const handleExportCSV = () => {
     if(batch.length === 0) return;
-    
     const headers = ["Description","Category","Price","Brand","Condition","Size","Color 1","Color 2","Source 1","Source 2","Age","Style 1","Style 2","Style 3","Location","Picture Hero url","Picture 2 url","Picture 3 url","Picture 4 url","Picture 5 url","Picture 6 url","Picture 7 url","Picture 8 url","Domestic Shipping price","International Shipping price"];
-    
     const csvRows = batch.map(i => [
       `"${i.description.replace(/"/g, '""')}"`, 
       `"${i.category.replace(/"/g, '""')}"`, 
-      i.price, 
-      `"${i.brand.replace(/"/g, '""')}"`,
-      `"${i.condition.replace(/"/g, '""')}"`, 
-      i.size,
-      i.color1, i.color2, i.source1, "", i.age, i.style1, i.style2, i.style3, i.location,
+      i.price, `"${i.brand.replace(/"/g, '""')}"`, `"${i.condition.replace(/"/g, '""')}"`, 
+      i.size, i.color1, i.color2, i.source1, "", i.age, i.style1, i.style2, i.style3, i.location,
       i.pic1, i.pic2, i.pic3, i.pic4, "", "", "", "", i.domesticShipping, i.internationalShipping
     ].join(","));
     
     const csvString = "Template version: 5\r\n" + headers.join(",") + "\r\n\r\n" + csvRows.join("\r\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob(["\uFEFF"+csvString], {type: "text/csv"}));
-    a.download = "depop_batch.csv";
+    a.download = `depop_batch_${new Date().toISOString().slice(0,10)}.csv`;
     a.click();
   };
 
-  /* ---------- RENDER ---------- */
+  /* ---------- SUB-RENDER: FORM FIELDS (Used in Main & Modal) ---------- */
+  const renderFormFields = () => (
+    <>
+        {/* CARD 1: CORE */}
+        <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-white ring-1 ring-gray-100 overflow-visible relative z-30 p-2">
+            <div className="bg-gradient-to-b from-white to-gray-50/50 px-8 py-5 border-b border-gray-100 rounded-t-[1.7rem]">
+                <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest flex items-center gap-2.5 opacity-80">
+                    <Tag className="w-4 h-4 text-[#A00028] fill-[#A00028]/20"/> Core Information
+                </h3>
+            </div>
+            <div className="p-8 grid grid-cols-1 gap-6">
+                <SearchableSelect label="Category" placeholder="Type to search..." options={depop.categories} value={formState.category} onChange={(v)=>handleUpdateField("category", v)} zIndex={100} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <SearchableSelect label="Brand" placeholder="Select Brand..." options={depop.brands} value={formState.brand} onChange={(v)=>handleUpdateField("brand", v)} zIndex={90} />
+                    <SearchableSelect label="Era / Age" placeholder="Select Era..." options={depop.ages} value={formState.era} onChange={(v)=>handleUpdateField("era", v)} zIndex={90} />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <TextInput label="Price" placeholder="0.00" value={formState.price} onChange={(e)=>handleUpdateField("price", e.target.value)} prefix="$" />
+                        <TextInput label="Short Title Context" placeholder="e.g. Rare graphic print" value={formState.shortContext} onChange={(e)=>handleUpdateField("shortContext", e.target.value)} />
+                </div>
+            </div>
+        </div>
+
+        {/* CARD 2: DETAILS */}
+        <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-white ring-1 ring-gray-100 overflow-visible relative z-20 p-2">
+            <div className="bg-gradient-to-b from-white to-gray-50/50 px-8 py-5 border-b border-gray-100 rounded-t-[1.7rem]">
+                <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest flex items-center gap-2.5 opacity-80">
+                    <Package className="w-4 h-4 text-blue-600 fill-blue-600/20"/> Item Details
+                </h3>
+            </div>
+            <div className="p-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <SearchableSelect label="Size" placeholder="Select Size..." options={depop.sizes} value={formState.size} onChange={(v)=>handleUpdateField("size", v)} zIndex={80} />
+                    <TextInput label="Measurements" placeholder="e.g. 22x28" value={formState.measurements} onChange={(e)=>handleUpdateField("measurements", e.target.value)} />
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                    <SearchableSelect label="Color 1" placeholder="Primary..." options={depop.colors} value={formState.color1} onChange={(v)=>handleUpdateField("color1", v)} zIndex={70} />
+                    <SearchableSelect label="Color 2" placeholder="Secondary..." options={depop.colors} value={formState.color2} onChange={(v)=>handleUpdateField("color2", v)} zIndex={70} />
+                </div>
+                <SearchableSelect label="Condition" placeholder="Select Condition..." options={depop.conditions} value={formState.condition} onChange={(v)=>handleUpdateField("condition", v)} zIndex={60} />
+                <div className="p-6 bg-gray-50/80 rounded-3xl border border-gray-100 relative z-10 shadow-inner">
+                    <label className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-4 block flex items-center gap-2">
+                            <Sparkles className="w-3 h-3"/> Style Tags
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                        <SearchableSelect label="" placeholder="Style 1" options={depop.styles} value={formState.style1} onChange={(v)=>handleUpdateField("style1", v)} zIndex={50} />
+                        <SearchableSelect label="" placeholder="Style 2" options={depop.styles} value={formState.style2} onChange={(v)=>handleUpdateField("style2", v)} zIndex={50} />
+                        <SearchableSelect label="" placeholder="Style 3" options={depop.styles} value={formState.style3} onChange={(v)=>handleUpdateField("style3", v)} zIndex={50} />
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 gap-6 pt-2">
+                        <SearchableSelect label="Source" placeholder="Source..." options={depop.sources} value={formState.source1} onChange={(v)=>handleUpdateField("source1", v)} zIndex={40} />
+                        <SearchableSelect label="Location" placeholder="Shipping From..." options={depop.locations} value={formState.location} onChange={(v)=>handleUpdateField("location", v)} zIndex={40} />
+                </div>
+            </div>
+        </div>
+
+        {/* CARD 3: IMAGES */}
+        <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-white ring-1 ring-gray-100 overflow-visible relative z-10 p-2">
+            <div className="bg-gradient-to-b from-white to-gray-50/50 px-8 py-5 border-b border-gray-100 rounded-t-[1.7rem] flex justify-between">
+                <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest flex items-center gap-2.5 opacity-80">
+                    <ImageIcon className="w-4 h-4 text-purple-600 fill-purple-600/20"/> Images & Shipping
+                </h3>
+            </div>
+            <div className="p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="space-y-4">
+                        <TextInput label="Hero Image URL" placeholder="https://..." value={formState.pic1} onChange={(e)=>handleUpdateField("pic1", e.target.value)} />
+                        <TextInput label="Image 2 URL" placeholder="https://..." value={formState.pic2} onChange={(e)=>handleUpdateField("pic2", e.target.value)} />
+                        <TextInput label="Image 3 URL" placeholder="https://..." value={formState.pic3} onChange={(e)=>handleUpdateField("pic3", e.target.value)} />
+                        <TextInput label="Image 4 URL" placeholder="https://..." value={formState.pic4} onChange={(e)=>handleUpdateField("pic4", e.target.value)} />
+                    </div>
+                    <div className="space-y-4">
+                        <div className="p-6 bg-gray-50/80 rounded-3xl border border-gray-100 h-full flex flex-col justify-center shadow-inner">
+                            <div className="space-y-6">
+                                <TextInput label="Domestic Ship" placeholder="0.00" value={formState.domesticShip} onChange={(e)=>handleUpdateField("domesticShip", e.target.value)} prefix="$" />
+                                <TextInput label="Intl Ship" placeholder="0.00" value={formState.intShip} onChange={(e)=>handleUpdateField("intShip", e.target.value)} prefix="$" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </>
+  );
+
   return (
-    <div className="min-h-screen bg-[#F8F9FC] text-slate-900 font-sans pb-28 selection:bg-[#A00028] selection:text-white bg-[radial-gradient(#E5E7EB_1px,transparent_1px)] [background-size:24px_24px]">
+    <div className="min-h-screen bg-[#F8F9FC] text-slate-900 font-sans pb-32 selection:bg-[#A00028] selection:text-white bg-[radial-gradient(#E5E7EB_1px,transparent_1px)] [background-size:24px_24px]">
       
       {/* HEADER */}
       <div className="w-full bg-white/70 backdrop-blur-lg border-b border-gray-200/60 px-6 py-4 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-4">
-                <img src="/images/logo.png" alt="Logo" className="h-9 w-auto object-contain" />
+                <div className="h-8 w-8 bg-[#A00028] rounded-lg flex items-center justify-center text-white font-black text-xs">V5</div>
                 <div className="h-4 w-[1px] bg-gray-300 mx-1"></div>
-                <h1 className="text-sm font-bold tracking-widest text-gray-500 uppercase">Vault Engine <span className="text-[#A00028]">V5</span></h1>
+                <h1 className="text-sm font-bold tracking-widest text-gray-500 uppercase">Vault Engine</h1>
             </div>
             {msg && (
                 <div className="flex items-center gap-2 text-[#A00028] bg-[#A00028]/5 px-4 py-1.5 rounded-full text-xs font-bold animate-in fade-in slide-in-from-top-2 border border-[#A00028]/10 shadow-sm">
@@ -755,103 +740,13 @@ export default function VaultBatchSystem() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
-          {/* --- LEFT: FORM --- */}
+          {/* --- LEFT: FORM AREA --- */}
           <div className="lg:col-span-7 space-y-8">
-            
-            {/* CARD 1: CORE INFO */}
-            <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-white ring-1 ring-gray-100 overflow-visible relative z-30 p-2">
-                <div className="bg-gradient-to-b from-white to-gray-50/50 px-8 py-5 border-b border-gray-100 rounded-t-[1.7rem]">
-                    <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest flex items-center gap-2.5 opacity-80">
-                        <Tag className="w-4 h-4 text-[#A00028] fill-[#A00028]/20"/> Core Information
-                    </h3>
-                </div>
-                <div className="p-8 grid grid-cols-1 gap-6">
-                    <SearchableSelect label="Category" placeholder="Type to search (e.g. Hoodie)..." options={depop.categories} value={category} onChange={setCategory} zIndex={100} />
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <SearchableSelect label="Brand" placeholder="Select Brand..." options={depop.brands} value={brand} onChange={setBrand} zIndex={90} />
-                        <SearchableSelect label="Era / Age" placeholder="Select Era..." options={depop.ages} value={era} onChange={setEra} zIndex={90} />
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <TextInput label="Price" placeholder="0.00" inputRef={priceRef} prefix="$" />
-                         <TextInput label="Short Title Context" placeholder="e.g. Rare graphic print" inputRef={shortRef} />
-                    </div>
-                </div>
-            </div>
-
-            {/* CARD 2: DETAILS */}
-            <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-white ring-1 ring-gray-100 overflow-visible relative z-20 p-2">
-                <div className="bg-gradient-to-b from-white to-gray-50/50 px-8 py-5 border-b border-gray-100 rounded-t-[1.7rem]">
-                    <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest flex items-center gap-2.5 opacity-80">
-                        <Package className="w-4 h-4 text-blue-600 fill-blue-600/20"/> Item Details
-                    </h3>
-                </div>
-                <div className="p-8 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <SearchableSelect label="Size" placeholder="Select Size..." options={depop.sizes} value={size} onChange={setSize} zIndex={80} />
-                        <TextInput label="Measurements" placeholder="e.g. 22x28" inputRef={measurementsRef} />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-6">
-                        <SearchableSelect label="Color 1" placeholder="Primary..." options={depop.colors} value={color1} onChange={setColor1} zIndex={70} />
-                        <SearchableSelect label="Color 2" placeholder="Secondary..." options={depop.colors} value={color2} onChange={setColor2} zIndex={70} />
-                    </div>
-                    
-                    <SearchableSelect label="Condition" placeholder="Select Condition..." options={depop.conditions} value={condition} onChange={setCondition} zIndex={60} />
-
-                    {/* STYLE BOX */}
-                    <div className="p-6 bg-gray-50/80 rounded-3xl border border-gray-100 relative z-10 shadow-inner">
-                        <label className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-4 block flex items-center gap-2">
-                             <Sparkles className="w-3 h-3"/> Style Tags
-                        </label>
-                        <div className="grid grid-cols-3 gap-3">
-                            <SearchableSelect label="" placeholder="Style 1" options={depop.styles} value={style1} onChange={setStyle1} zIndex={50} />
-                            <SearchableSelect label="" placeholder="Style 2" options={depop.styles} value={style2} onChange={setStyle2} zIndex={50} />
-                            <SearchableSelect label="" placeholder="Style 3" options={depop.styles} value={style3} onChange={setStyle3} zIndex={50} />
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-6 pt-2">
-                         <SearchableSelect label="Source" placeholder="Source..." options={depop.sources} value={source1} onChange={setSource1} zIndex={40} />
-                         <SearchableSelect label="Location" placeholder="Shipping From..." options={depop.locations} value={location} onChange={setLocation} zIndex={40} />
-                    </div>
-                </div>
-            </div>
-
-            {/* CARD 3: IMAGES & SHIP */}
-            <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-white ring-1 ring-gray-100 overflow-visible relative z-10 p-2">
-                <div className="bg-gradient-to-b from-white to-gray-50/50 px-8 py-5 border-b border-gray-100 rounded-t-[1.7rem] flex justify-between">
-                    <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest flex items-center gap-2.5 opacity-80">
-                        <ImageIcon className="w-4 h-4 text-purple-600 fill-purple-600/20"/> Images
-                    </h3>
-                    <h3 className="text-xs font-black text-gray-900 uppercase tracking-widest flex items-center gap-2.5 opacity-80">
-                        <Truck className="w-4 h-4 text-green-600 fill-green-600/20"/> Shipping
-                    </h3>
-                </div>
-                <div className="p-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div className="space-y-4">
-                            <TextInput label="Hero Image URL" placeholder="https://..." inputRef={pic1Ref} />
-                            <TextInput label="Image 2 URL" placeholder="https://..." inputRef={pic2Ref} />
-                            <TextInput label="Image 3 URL" placeholder="https://..." inputRef={pic3Ref} />
-                            <TextInput label="Image 4 URL" placeholder="https://..." inputRef={pic4Ref} />
-                        </div>
-                        <div className="space-y-4">
-                            <div className="p-6 bg-gray-50/80 rounded-3xl border border-gray-100 h-full flex flex-col justify-center shadow-inner">
-                                <div className="space-y-6">
-                                    <TextInput label="Domestic Ship" placeholder="0.00" inputRef={domesticShipRef} prefix="$" />
-                                    <TextInput label="Intl Ship" placeholder="0.00" inputRef={intShipRef} prefix="$" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {renderFormFields()}
           </div>
 
           {/* --- RIGHT: PREVIEW & BATCH --- */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-8 sticky top-24">
             
             {/* SEO HEALTH WIDGET */}
             <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/60 p-4 flex items-center justify-between">
@@ -872,7 +767,7 @@ export default function VaultBatchSystem() {
                  </div>
             </div>
 
-            {/* EDITABLE PREVIEW */}
+            {/* LIVE EDITOR */}
             <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] border border-white ring-1 ring-gray-100 overflow-hidden p-2">
                 <div className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center rounded-t-[1.7rem] shadow-lg shadow-gray-900/20">
                     <h2 className="text-xs font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
@@ -880,7 +775,7 @@ export default function VaultBatchSystem() {
                     </h2>
                     <button 
                         type="button"
-                        onClick={async () => { await navigator.clipboard.writeText(output); setCopied(true); setTimeout(()=>setCopied(false), 1000); }} 
+                        onClick={async () => { await navigator.clipboard.writeText(formState.output); setCopied(true); setTimeout(()=>setCopied(false), 1000); }} 
                         className="text-[10px] font-bold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 border border-white/10"
                     >
                         {copied ? <CheckCircle className="w-3 h-3 text-green-400"/> : <Copy className="w-3 h-3"/>} 
@@ -888,10 +783,10 @@ export default function VaultBatchSystem() {
                     </button>
                 </div>
                 <div className="p-0 bg-gray-50/50 min-h-[240px] rounded-b-[1.7rem] relative group">
-                    {isOutputDirty || output ? (
+                    {formState.isOutputDirty || formState.output ? (
                           <textarea
-                             value={output}
-                             onChange={handleTextChange}
+                             value={formState.output}
+                             onChange={(e) => handleUpdateField("output", e.target.value)}
                              className="w-full h-full min-h-[240px] bg-transparent p-6 text-xs text-gray-600 font-medium font-mono leading-relaxed resize-none outline-none focus:bg-white/50 transition-colors"
                              placeholder="Click 'Preview' or type here..."
                           />
@@ -904,38 +799,93 @@ export default function VaultBatchSystem() {
                 </div>
             </div>
 
-            {/* BATCH LIST */}
+            {/* BATCH & PREVIEW TABS */}
             <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] border border-white ring-1 ring-gray-100 overflow-hidden p-2">
                 <div className="px-8 py-5 border-b border-gray-100 flex justify-between items-center bg-gradient-to-b from-white to-gray-50/50 rounded-t-[1.7rem]">
-                    <h2 className="text-xs font-black uppercase text-gray-900 tracking-widest opacity-80">Batch Queue</h2>
+                    <div className="flex gap-4">
+                        <button 
+                            onClick={() => setPreviewTab("cards")}
+                            className={`text-xs font-black uppercase tracking-widest transition-colors flex items-center gap-2 ${previewTab === "cards" ? "text-gray-900" : "text-gray-400 hover:text-gray-600"}`}
+                        >
+                            <Table className="w-3.5 h-3.5"/> Batch List
+                        </button>
+                        <div className="w-[1px] h-4 bg-gray-300"></div>
+                        <button 
+                            onClick={() => setPreviewTab("csv")}
+                            className={`text-xs font-black uppercase tracking-widest transition-colors flex items-center gap-2 ${previewTab === "csv" ? "text-gray-900" : "text-gray-400 hover:text-gray-600"}`}
+                        >
+                            <FileSpreadsheet className="w-3.5 h-3.5"/> CSV Preview
+                        </button>
+                    </div>
                     <div className="bg-[#A00028]/10 border border-[#A00028]/10 text-[#A00028] text-[10px] font-black px-2.5 py-1 rounded-md shadow-sm">
                         {batch.length} ITEMS
                     </div>
                 </div>
+                
                 <div className="p-6">
-                    <div className="max-h-[400px] overflow-y-auto space-y-2.5 mb-6 custom-scrollbar pr-2">
-                        {batch.length === 0 && (
-                            <div className="text-center text-xs text-gray-400 py-12 border-2 border-dashed border-gray-100 rounded-2xl">
-                                Batch is currently empty
-                            </div>
-                        )}
-                        {batch.map((item, i) => (
-                            <div key={item.id} className="flex justify-between items-center p-3.5 bg-white border border-gray-100 rounded-xl group hover:border-[#A00028]/20 hover:shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] transition-all duration-200">
-                                <div className="flex flex-col gap-0.5">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-[10px] font-black text-gray-300">#{i+1}</span>
-                                        <span className="text-xs font-bold text-gray-800">{item.brand.split(" (")[0] || "No Brand"}</span>
-                                    </div>
-                                    <span className="text-[10px] font-medium text-gray-400 truncate w-48 pl-5">
-                                        {item.category.split(" >> ").pop()?.split(" (")[0]}
-                                    </span>
+                    {/* VIEW 1: CARDS */}
+                    {previewTab === "cards" && (
+                        <div className="max-h-[400px] overflow-y-auto space-y-2.5 mb-6 custom-scrollbar pr-2">
+                            {batch.length === 0 && (
+                                <div className="text-center text-xs text-gray-400 py-12 border-2 border-dashed border-gray-100 rounded-2xl">
+                                    Batch is currently empty
                                 </div>
-                                <button type="button" onClick={() => setBatch(b => b.filter(x => x.id !== item.id))} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all">
-                                    <Trash2 className="w-4 h-4"/>
-                                </button>
-                            </div>
-                        ))}
-                    </div>
+                            )}
+                            {batch.map((item, i) => (
+                                <div key={item.id} className="flex justify-between items-center p-3.5 bg-white border border-gray-100 rounded-xl group hover:border-[#A00028]/20 hover:shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] transition-all duration-200">
+                                    <div className="flex flex-col gap-0.5">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[10px] font-black text-gray-300">#{i+1}</span>
+                                            <span className="text-xs font-bold text-gray-800">{item.brand.split(" (")[0] || "No Brand"}</span>
+                                        </div>
+                                        <span className="text-[10px] font-medium text-gray-400 truncate w-48 pl-5">
+                                            {item.category.split(" >> ").pop()?.split(" (")[0]}
+                                        </span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button type="button" onClick={() => openEditModal(item)} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-300 hover:text-blue-500 hover:bg-blue-50 transition-all">
+                                            <Edit3 className="w-4 h-4"/>
+                                        </button>
+                                        <button type="button" onClick={() => setBatch(b => b.filter(x => x.id !== item.id))} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all">
+                                            <Trash2 className="w-4 h-4"/>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* VIEW 2: CSV GRID */}
+                    {previewTab === "csv" && (
+                        <div className="max-h-[400px] overflow-auto mb-6 custom-scrollbar border border-gray-100 rounded-xl bg-gray-50/50">
+                            {batch.length === 0 ? (
+                                <div className="text-center text-xs text-gray-400 py-12">No data to preview</div>
+                            ) : (
+                                <table className="w-max min-w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-gray-100 border-b border-gray-200">
+                                            {["Description", "Category", "Price", "Brand", "Condition", "Size"].map(h => (
+                                                <th key={h} className="p-3 text-[10px] font-bold text-gray-500 uppercase whitespace-nowrap sticky top-0 bg-gray-100 z-10">{h}</th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100 bg-white">
+                                        {batch.map(item => (
+                                            <tr key={item.id} className="hover:bg-blue-50/30">
+                                                <td className="p-3 text-[10px] font-mono text-gray-600 max-w-[200px] truncate">{item.description}</td>
+                                                <td className="p-3 text-[10px] font-medium text-gray-800 whitespace-nowrap">{cleanVal(item.category)}</td>
+                                                <td className="p-3 text-[10px] text-gray-600">${item.price}</td>
+                                                <td className="p-3 text-[10px] text-gray-600">{cleanVal(item.brand)}</td>
+                                                <td className="p-3 text-[10px] text-gray-600">{cleanVal(item.condition)}</td>
+                                                <td className="p-3 text-[10px] text-gray-600">{item.size}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    )}
+
                     <div className="grid grid-cols-2 gap-3">
                         <button 
                             type="button"
@@ -961,8 +911,8 @@ export default function VaultBatchSystem() {
         </div>
       </div>
 
-      {/* FLOATING ACTION BAR */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md">
+      {/* FLOATING ACTION BAR (MAIN) */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-md">
         <div className="bg-white/90 backdrop-blur-xl p-2 rounded-[1.5rem] shadow-[0_20px_60px_-10px_rgba(0,0,0,0.15)] border border-white/50 ring-1 ring-gray-200 flex gap-2">
             <button type="button" onClick={handleClearForm} className="px-5 py-3 text-xs font-bold text-gray-500 hover:bg-gray-100 hover:text-gray-900 rounded-2xl transition-colors">
                 CLEAR
@@ -983,6 +933,59 @@ export default function VaultBatchSystem() {
             </button>
         </div>
       </div>
+
+      {/* MODAL: EDIT ITEM */}
+      {editingItem && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-gray-900/30 backdrop-blur-sm" onClick={() => setEditingItem(null)} />
+              <div className="bg-[#F8F9FC] w-full max-w-4xl max-h-[90vh] rounded-[2.5rem] shadow-2xl relative flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                  
+                  {/* Modal Header */}
+                  <div className="bg-white px-8 py-5 border-b border-gray-200 flex justify-between items-center z-10 shrink-0">
+                      <div>
+                          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                              <Edit3 className="w-5 h-5 text-[#A00028]"/> Edit Item
+                          </h2>
+                          <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Modifying ID: {editingItem.id.slice(0,8)}...</p>
+                      </div>
+                      <button onClick={() => { setEditingItem(null); handleClearForm(); }} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
+                          <X className="w-5 h-5 text-gray-600" />
+                      </button>
+                  </div>
+
+                  {/* Modal Body (Scrollable) */}
+                  <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8 bg-[#F8F9FC]">
+                       {renderFormFields()}
+                       
+                       {/* Live Editor inside Modal */}
+                       <div className="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm">
+                           <h3 className="text-xs font-black uppercase text-gray-400 mb-2">Updated Description Preview</h3>
+                           <textarea 
+                                value={formState.output} 
+                                onChange={(e) => handleUpdateField("output", e.target.value)}
+                                className="w-full h-40 bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs font-mono"
+                           />
+                       </div>
+                  </div>
+
+                  {/* Modal Footer */}
+                  <div className="bg-white px-8 py-4 border-t border-gray-200 flex justify-end gap-3 shrink-0 z-10">
+                       <button 
+                          onClick={() => { setEditingItem(null); handleClearForm(); }}
+                          className="px-6 py-3 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-100 transition-colors"
+                       >
+                           Cancel
+                       </button>
+                       <button 
+                          onClick={saveEditedItem}
+                          className="px-8 py-3 rounded-xl font-bold text-sm text-white bg-[#A00028] hover:bg-[#850020] shadow-lg shadow-[#A00028]/20 flex items-center gap-2 transition-transform active:scale-95"
+                       >
+                           <Save className="w-4 h-4" /> Save Changes
+                       </button>
+                  </div>
+              </div>
+          </div>
+      )}
 
     </div>
   );
