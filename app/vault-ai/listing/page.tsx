@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState, useEffect, useMemo } from "react";
-import { ChevronDown, Copy, Plus, Trash2, Download, CheckCircle, X, Package, Tag, Image as ImageIcon, Truck, Search, Sparkles, Edit3 } from "lucide-react";
+import { ChevronDown, Copy, Plus, Trash2, Download, CheckCircle, X, Package, Tag, Image as ImageIcon, Truck, Search, Sparkles, Edit3, BarChart3 } from "lucide-react";
 
 /* ---------- DEPOP TAXONOMY DATA (FULL RAW) ---------- */
 const depop = {
@@ -187,8 +187,7 @@ const depop = {
     "Kids 4", "Kids 5", "Kids 6", "Kids 6X", "Kids 7", "Kids 8", "Kids 10", "Kids 12", "Kids 14", "Kids 16", "Kids 18", "Kids 20"
   ],
   brands: [
-    "Adidas (adidas)", "Nike (nike)", "Zara (zara)", "H&M (h-m)", "Levi's (levi-s)", "Champion (champion)", 
-    "Vintage (vintage)", "American Vintage (american-vintage)", "Jerzees (jerzees)", "Gildan (gildan)", "Unbranded (unbranded)", 
+    "Adidas (adidas)", "Nike (nike)", "Zara (zara)", "H&M (h-m)", "Levi's (levi-s)", "Champion (champion)", "Vintage (vintage)", "Unbranded (unbranded)", 
     "Urban Outfitters (urban-outfitters)", "Topshop (topshop)", "Brandy Melville (brandy-melville)", "Ralph Lauren (ralph-lauren)",
     "Tommy Hilfiger (tommy-hilfiger)", "Calvin Klein (calvin-klein)", "Gucci (gucci)", "Dr. Martens (dr-martens)", "Converse (converse)", 
     "Vans (vans)", "Puma (puma)", "Reebok (reebok)", "Under Armour (under-armour)", "The North Face (the-north-face)", "Patagonia (patagonia)",
@@ -227,7 +226,7 @@ const depop = {
     "Loona (loona)", "Dreamcatcher (dreamcatcher)", "Mamamoo (mamamoo)", "G-Idle (g-idle)", "Everglow (everglow)", "Fromis_9 (fromis_9)", 
     "WJSN (wjsn)", "Cherry Bullet (cherry-bullet)", "Rocket Punch (rocket-punch)", "Weeekly (weeekly)", "Woo!ah! (woo-ah)", "Lightsum (lightsum)",
     "Billlie (billlie)", "Viviz (viviz)", "Class:y (class-y)", "NiziU (niziu)", "XG (xg)", "Fifty Fifty (fifty-fifty)", "TripleS (triples)", 
-    "Kiss of Life (kiss-of-life)", "BabyMonster (babymonster)"
+    "Kiss of Life (kiss-of-life)", "BabyMonster (babymonster)", "Other (unbranded)", "Fruit of The Loom (fruit-of-the-loom)", "NFL (nfl)"
   ],
   conditions: [
     "Brand new (brand_new)", "Like new (used_like_new)", "Used - Excellent (used_excellent)", "Used - Good (used_good)", "Used - Fair (used_fair)"
@@ -492,6 +491,7 @@ export default function VaultBatchSystem() {
   const [style1, setStyle1] = useState("");
   const [style2, setStyle2] = useState("");
   const [style3, setStyle3] = useState("");
+  const [seoScore, setSeoScore] = useState(0);
 
   /* ---------- REFS ---------- */
   const shortRef = useRef<HTMLInputElement | null>(null);
@@ -512,62 +512,127 @@ export default function VaultBatchSystem() {
   const [msg, setMsg] = useState(""); 
 
   /* ---------- LOGIC ---------- */
+  const cleanVal = (val: string) => val.split(" (")[0].split(" >> ").pop() || val;
+
+  // --- LIVE SEO SCORING ---
+  useEffect(() => {
+    let score = 0;
+    if (category) score += 15;
+    if (brand) score += 15;
+    if (size) score += 15;
+    if (condition) score += 10;
+    if (style1) score += 10; // Vibe is important
+    
+    // Title Length Check
+    const titleParts = [era, brand, category, shortRef.current?.value].filter(Boolean).join(" ");
+    if (titleParts.length > 30) score += 15;
+    
+    // Image Check
+    if (pic1Ref.current?.value) score += 20;
+
+    setSeoScore(Math.min(100, score));
+  }, [category, brand, size, condition, style1, era, isOutputDirty]);
+
+
   const generateDescriptionString = () => {
-    const shortcontext = shortRef.current?.value?.trim() || "";
+    const rawShortContext = shortRef.current?.value?.trim() || "";
     const measurements = measurementsRef.current?.value?.trim() || "";
     
-    // Clean values for preview legibility
-    const cleanVal = (val: string) => val.split(" (")[0].split(" >> ").pop() || val;
+    const finalEra = cleanVal(era);
+    const finalBrand = cleanVal(brand);
+    
+    // --- 1. SINGULARIZATION LOGIC (Title) ---
+    const getSingularCategory = (catString: string) => {
+        const clean = cleanVal(catString);
+        const lower = clean.toLowerCase();
+        const keepPlural = ["jeans", "pants", "shorts", "leggings", "overalls", "tights", "sunglasses", "slippers", "clogs", "pajamas", "dungarees"];
+        if (keepPlural.some(k => lower.includes(k))) return clean;
+        if (lower.endsWith("ies")) return clean.slice(0, -3) + "y";
+        if (lower.endsWith("sses")) return clean.slice(0, -2);
+        if (lower.endsWith("ches") || lower.endsWith("xes") || lower.endsWith("shes")) return clean.slice(0, -2);
+        if (lower.endsWith("s") && !lower.endsWith("ss")) return clean.slice(0, -1);
+        return clean;
+    };
+
+    const finalCategory = getSingularCategory(category);
+
+    // --- 2. DEDUPLICATION LOGIC (Title) ---
+    let optimizedContext = rawShortContext;
+    if (finalBrand) optimizedContext = optimizedContext.replace(new RegExp(`\\b${finalBrand}\\b`, 'gi'), "");
+    if (finalCategory) optimizedContext = optimizedContext.replace(new RegExp(`\\b${finalCategory}\\b`, 'gi'), "");
+    if (finalEra) optimizedContext = optimizedContext.replace(/vintage/gi, "");
+    optimizedContext = optimizedContext.replace(/\s+/g, " ").trim();
 
     const title = [
-        era && `Vintage ${cleanVal(era)}`, 
-        cleanVal(category), 
-        cleanVal(brand), 
-        shortcontext
+        finalEra, 
+        finalBrand, 
+        finalCategory, 
+        optimizedContext,
+        size && `- Size ${size}` 
     ].filter(Boolean).join(" ");
     
+    // --- COMPACT DETAILS ---
     const details = [
       size && `• Size: ${size}`,
       measurements && `• Measurements: ${measurements}`,
       condition && `• Condition: ${cleanVal(condition)}`,
-      style1 && `• Style vibe: ${cleanVal(style1)}`,
+      (style1 || style2) && `• Style: ${[cleanVal(style1), cleanVal(style2)].filter(Boolean).join(", ")}`,
     ].filter(Boolean).join("\n");
 
-    // --- SINGULARIZER MAP ---
-    const singularMap: Record<string, string> = {
-      "hoodies": "Hoodie",
-      "shirts": "Shirt",
-      "t-shirts": "Tshirt",
-      "tshirts": "Tshirt",
-      "sweatshirts": "Sweatshirt",
-      "sweaters": "Sweater",
-      "jackets": "Jacket",
-      "coats": "Coat",
-      "blouses": "Blouse",
-      "vests": "Vest",
-      "cardigans": "Cardigan",
-      "tops": "Top"
-    };
-
-    const processTag = (val: string) => {
-       const lower = val.toLowerCase();
-       return singularMap[lower] || val;
-    };
-
-    // TAGS: Deduplicated, cleaned, singularized, and formatted
-    const potentialTags = [
-        cleanVal(brand), 
-        processTag(cleanVal(category)), // Apply singular logic to category
-        cleanVal(style1), 
-        cleanVal(era), 
-        "vintage"
-    ]
-      .filter(Boolean)
-      .map((t) => "#" + t?.replace(/\s+/g, ""));
+    // --- 3. SMART HASHTAG LOGIC (With High-Quality Fallbacks) ---
     
-    const tags = Array.from(new Set(potentialTags)).slice(0, 5).join(" ");
+    // A. Brand Vibe Mapper
+    const getBrandVibe = (b: string) => {
+        const lower = b.toLowerCase();
+        if (lower.includes("nike") || lower.includes("adidas") || lower.includes("puma") || lower.includes("champion") || lower.includes("fila") || lower.includes("reebok") || lower.includes("under armour") || lower.includes("north face")) return "gorpcore";
+        if (lower.includes("carhartt") || lower.includes("dickies") || lower.includes("wrangler")) return "workwear";
+        if (lower.includes("stussy") || lower.includes("supreme") || lower.includes("palace") || lower.includes("vans") || lower.includes("thrasher")) return "streetwear";
+        if (lower.includes("tripp") || lower.includes("lip service") || lower.includes("killstar") || lower.includes("demon")) return "goth";
+        if (lower.includes("harley")) return "biker";
+        if (lower.includes("north face") || lower.includes("patagonia") || lower.includes("columbia") || lower.includes("arc'teryx")) return "gorpcore";
+        if (lower.includes("abercrombie") || lower.includes("hollister") || lower.includes("juicy") || lower.includes("von dutch") || lower.includes("ed hardy")) return "y2k";
+        if (lower.includes("lauren") || lower.includes("tommy") || lower.includes("nautica") || lower.includes("lacoste")) return "preppy";
+        return "";
+    };
 
-    return [title, details, "Ships next day 📦 | DM me with questions 💬", tags].filter(Boolean).join("\n\n");
+    // B. Category Synonyms (High-Value Fallbacks)
+    const getCategorySynonyms = (cat: string) => {
+        const lower = cat.toLowerCase();
+        if(lower.includes("hoodie")) return ["hoodie", "sweatshirt"];
+        if(lower.includes("t-shirt") || lower.includes("top")) return ["tee", "top"];
+        if(lower.includes("jeans") || lower.includes("pants")) return ["denim", "trousers"];
+        if(lower.includes("jacket") || lower.includes("coat")) return ["jacket", "outerwear"];
+        if(lower.includes("sweater")) return ["jumper", "knit"];
+        if(lower.includes("dress")) return ["dress", "summer"];
+        return [];
+    };
+
+    // C. Is it actually vintage?
+    const isVintageEra = ["90s", "80s", "70s", "60s", "50s", "antique", "y2k"].some(e => finalEra.toLowerCase().includes(e));
+
+    // D. Construct Tags (Priority Order)
+    const potentialTags = [
+        cleanVal(style1), 
+        cleanVal(style2), 
+        cleanVal(style3), 
+        getBrandVibe(finalBrand), 
+        isVintageEra ? "vintage" : "",
+        finalEra.toLowerCase(), 
+        cleanVal(condition).includes("Brand new") ? "deadstock" : "",
+        ...getCategorySynonyms(category), // Add synonym fallbacks
+        "streetwear", // Strong generic fallback
+        "fashion",
+        "style"
+    ];
+
+    const tags = Array.from(new Set(potentialTags)) // Unique only
+      .filter(Boolean) // Remove empty
+      .map((t) => "#" + t?.replace(/\s+/g, "").toLowerCase())
+      .slice(0, 5) // Strict Max 5
+      .join(" ");
+
+    // TIGHT SPACING RETURN (Single \n)
+    return [title, details, "Ships next day 📦 | DM me with questions 💬", tags].filter(Boolean).join("\n");
   };
 
   const handlePreview = (e: React.FormEvent) => {
@@ -582,6 +647,30 @@ export default function VaultBatchSystem() {
       setIsOutputDirty(true); 
   };
 
+  // --- CLEAR FUNCTION ---
+  const handleClearForm = (e?: React.MouseEvent) => {
+      if (e) e.preventDefault(); 
+
+      // 1. Reset State Variables
+      setEra(""); setCategory(""); setBrand(""); setSize(""); 
+      setCondition(""); setColor1(""); setColor2(""); setSource1(""); 
+      setLocation(""); setStyle1(""); setStyle2(""); setStyle3("");
+      
+      // 2. Reset Ref Values
+      [shortRef, priceRef, measurementsRef, domesticShipRef, intShipRef, pic1Ref, pic2Ref, pic3Ref, pic4Ref].forEach(ref => {
+          if (ref.current) ref.current.value = "";
+      });
+      
+      // 3. Reset Output
+      setOutput("");
+      setIsOutputDirty(false);
+      setSeoScore(0);
+      
+      // 4. Feedback
+      setMsg("Form Cleared"); 
+      setTimeout(()=>setMsg(""), 1000);
+  };
+
   const handleAddToBatch = () => {
     if (!category) {
         setMsg("Category required"); 
@@ -594,7 +683,7 @@ export default function VaultBatchSystem() {
     const newItem: BatchItem = {
       id: crypto.randomUUID(),
       description: finalDescription,
-      category, // SAVES FULL STRING WITH SLUG
+      category, 
       price: priceRef.current?.value || "", 
       brand, 
       condition, 
@@ -627,7 +716,7 @@ export default function VaultBatchSystem() {
     
     const csvRows = batch.map(i => [
       `"${i.description.replace(/"/g, '""')}"`, 
-      `"${i.category.replace(/"/g, '""')}"`, // Full string exported here
+      `"${i.category.replace(/"/g, '""')}"`, 
       i.price, 
       `"${i.brand.replace(/"/g, '""')}"`,
       `"${i.condition.replace(/"/g, '""')}"`, 
@@ -764,6 +853,25 @@ export default function VaultBatchSystem() {
           {/* --- RIGHT: PREVIEW & BATCH --- */}
           <div className="lg:col-span-5 space-y-8">
             
+            {/* SEO HEALTH WIDGET */}
+            <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/60 p-4 flex items-center justify-between">
+                 <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                        <BarChart3 className="w-5 h-5" />
+                    </div>
+                    <div>
+                        <h4 className="text-xs font-black uppercase text-gray-500 tracking-wider">SEO Health</h4>
+                        <p className="text-[10px] font-medium text-gray-400">Completeness Score</p>
+                    </div>
+                 </div>
+                 <div className="flex items-center gap-3">
+                    <div className="h-2 w-24 bg-gray-100 rounded-full overflow-hidden">
+                        <div className={`h-full transition-all duration-500 ${seoScore > 80 ? 'bg-green-500' : seoScore > 50 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{ width: `${seoScore}%` }}></div>
+                    </div>
+                    <span className="text-sm font-bold text-gray-700">{seoScore}%</span>
+                 </div>
+            </div>
+
             {/* EDITABLE PREVIEW */}
             <div className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] border border-white ring-1 ring-gray-100 overflow-hidden p-2">
                 <div className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center rounded-t-[1.7rem] shadow-lg shadow-gray-900/20">
@@ -771,6 +879,7 @@ export default function VaultBatchSystem() {
                          <Edit3 className="w-3 h-3"/> Live Editor
                     </h2>
                     <button 
+                        type="button"
                         onClick={async () => { await navigator.clipboard.writeText(output); setCopied(true); setTimeout(()=>setCopied(false), 1000); }} 
                         className="text-[10px] font-bold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 border border-white/10"
                     >
@@ -780,12 +889,12 @@ export default function VaultBatchSystem() {
                 </div>
                 <div className="p-0 bg-gray-50/50 min-h-[240px] rounded-b-[1.7rem] relative group">
                     {isOutputDirty || output ? (
-                         <textarea
+                          <textarea
                              value={output}
                              onChange={handleTextChange}
                              className="w-full h-full min-h-[240px] bg-transparent p-6 text-xs text-gray-600 font-medium font-mono leading-relaxed resize-none outline-none focus:bg-white/50 transition-colors"
                              placeholder="Click 'Preview' or type here..."
-                         />
+                          />
                     ) : (
                         <div className="h-full flex flex-col items-center justify-center text-gray-300 gap-3 py-12 border-2 border-dashed border-gray-200 rounded-2xl m-4">
                             <Search className="w-10 h-10 opacity-20"/>
@@ -821,7 +930,7 @@ export default function VaultBatchSystem() {
                                         {item.category.split(" >> ").pop()?.split(" (")[0]}
                                     </span>
                                 </div>
-                                <button onClick={() => setBatch(b => b.filter(x => x.id !== item.id))} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all">
+                                <button type="button" onClick={() => setBatch(b => b.filter(x => x.id !== item.id))} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all">
                                     <Trash2 className="w-4 h-4"/>
                                 </button>
                             </div>
@@ -829,6 +938,7 @@ export default function VaultBatchSystem() {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <button 
+                            type="button"
                             onClick={() => setBatch([])} 
                             disabled={batch.length===0} 
                             className="py-3.5 text-xs font-bold text-red-600 bg-red-50 border border-red-100 rounded-xl hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
@@ -836,6 +946,7 @@ export default function VaultBatchSystem() {
                             CLEAR ALL
                         </button>
                         <button 
+                            type="button"
                             onClick={handleExportCSV} 
                             disabled={batch.length===0} 
                             className="py-3.5 text-xs font-bold text-white bg-gray-900 rounded-xl hover:bg-black hover:shadow-lg hover:shadow-gray-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
@@ -853,16 +964,18 @@ export default function VaultBatchSystem() {
       {/* FLOATING ACTION BAR */}
       <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md">
         <div className="bg-white/90 backdrop-blur-xl p-2 rounded-[1.5rem] shadow-[0_20px_60px_-10px_rgba(0,0,0,0.15)] border border-white/50 ring-1 ring-gray-200 flex gap-2">
-            <button onClick={() => window.location.reload()} className="px-5 py-3 text-xs font-bold text-gray-500 hover:bg-gray-100 hover:text-gray-900 rounded-2xl transition-colors">
+            <button type="button" onClick={handleClearForm} className="px-5 py-3 text-xs font-bold text-gray-500 hover:bg-gray-100 hover:text-gray-900 rounded-2xl transition-colors">
                 CLEAR
             </button>
             <button 
+                type="button"
                 onClick={handlePreview}
                 className="flex-1 bg-gray-900 hover:bg-black text-white py-3 rounded-2xl font-bold transition-all shadow-lg shadow-gray-900/10 flex items-center justify-center gap-2 text-xs tracking-wide"
             >
                 <Search className="w-3.5 h-3.5"/> PREVIEW
             </button>
             <button 
+                type="button"
                 onClick={handleAddToBatch}
                 className="flex-1 bg-[#A00028] hover:bg-[#850020] text-white py-3 rounded-2xl font-bold transition-all shadow-lg shadow-[#A00028]/20 flex items-center justify-center gap-2 text-xs tracking-wide"
             >
