@@ -376,7 +376,6 @@ export default function VaultBatchSystem() {
   const [editingItem, setEditingItem] = useState<BatchItem | null>(null);
 
   /* ---------- FORM STATE (Main & Edit) ---------- */
-  // Use a customized hook or object to manage form state to easily swap between "Create" and "Edit" modes
   const [formState, setFormState] = useState({
     era: "", category: "", brand: "", size: "", condition: "",
     color1: "", color2: "", source1: "", location: "",
@@ -501,10 +500,21 @@ export default function VaultBatchSystem() {
   const handleUpdateField = (field: string, value: any) => {
     setFormState(prev => {
         const newState = { ...prev, [field]: value };
-        // Auto-update output if dirty not explicitly set (simple mode)
-        if(!prev.isOutputDirty) {
+        
+        // --- LOGIC FIX START ---
+        // If the user is specifically editing the "output" text area, 
+        // we set isOutputDirty to true. This stops the auto-generator from 
+        // overwriting their manual work in the future.
+        if (field === "output") {
+            newState.isOutputDirty = true;
+        } 
+        // Otherwise, if we are editing normal fields (brand, size, etc)
+        // We ONLY auto-generate if the user hasn't manually dirtied the output yet.
+        else if (!prev.isOutputDirty) {
             newState.output = generateDescriptionString(newState);
         }
+        // --- LOGIC FIX END ---
+
         return newState;
     });
   };
@@ -512,7 +522,14 @@ export default function VaultBatchSystem() {
   const handlePreview = () => {
       const generated = generateDescriptionString(formState);
       handleUpdateField("output", generated);
-      handleUpdateField("isOutputDirty", true);
+      // Explicitly set dirty to true so subsequent field edits don't overwrite this preview
+      // Note: handleUpdateField handles the state merge, but since we need to force
+      // the dirty flag alongside the output update for the preview button specifically:
+      setFormState(prev => ({
+          ...prev,
+          output: generated,
+          isOutputDirty: true
+      }));
   };
 
   const handleClearForm = () => {
@@ -537,7 +554,8 @@ export default function VaultBatchSystem() {
         return; 
     }
 
-    const finalDescription = formState.isOutputDirty ? formState.output : generateDescriptionString(formState);
+    // Use current output (whether manual or generated)
+    const finalDescription = formState.output || generateDescriptionString(formState);
 
     const newItem: BatchItem = {
       id: crypto.randomUUID(),
@@ -579,7 +597,7 @@ export default function VaultBatchSystem() {
         shortContext: item.rawShortContext || "", price: item.price, measurements: item.measurements || "",
         domesticShip: item.domesticShipping, intShip: item.internationalShipping,
         pic1: item.pic1, pic2: item.pic2, pic3: item.pic3, pic4: item.pic4,
-        output: item.description, isOutputDirty: true
+        output: item.description, isOutputDirty: true // Assume edited items are "dirty" to prevent immediate overwrite
     });
   };
 
@@ -783,19 +801,12 @@ export default function VaultBatchSystem() {
                     </button>
                 </div>
                 <div className="p-0 bg-gray-50/50 min-h-[240px] rounded-b-[1.7rem] relative group">
-                    {formState.isOutputDirty || formState.output ? (
-                          <textarea
-                             value={formState.output}
-                             onChange={(e) => handleUpdateField("output", e.target.value)}
-                             className="w-full h-full min-h-[240px] bg-transparent p-6 text-xs text-gray-600 font-medium font-mono leading-relaxed resize-none outline-none focus:bg-white/50 transition-colors"
-                             placeholder="Click 'Preview' or type here..."
-                          />
-                    ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-gray-300 gap-3 py-12 border-2 border-dashed border-gray-200 rounded-2xl m-4">
-                            <Search className="w-10 h-10 opacity-20"/>
-                            <span className="text-xs font-medium uppercase tracking-wider opacity-60">Content appears here</span>
-                        </div>
-                    )}
+                    <textarea
+                        value={formState.output}
+                        onChange={(e) => handleUpdateField("output", e.target.value)}
+                        className="w-full h-full min-h-[240px] bg-transparent p-6 text-xs text-gray-600 font-medium font-mono leading-relaxed resize-none outline-none focus:bg-white/50 transition-colors"
+                        placeholder="Click 'Preview' or type here..."
+                    />
                 </div>
             </div>
 
