@@ -30,30 +30,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* ---------- Outseta Global Script ---------- */}
+        {/* ---------- Outseta Global Script (WORKING VERSION) ---------- */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              var o_options = {
-                domain: 'treasuretto-llc.outseta.com',
-                load: 'auth,customForm,emailList,leadCapture,nocode,profile,support'
-              };
+              (function(o,l,s,e,t,a){o['Outseta']=o['Outseta']||function(){
+                (o['Outseta'].q=o['Outseta'].q||[]).push(arguments)};
+                t=l.createElement(s),a=l.getElementsByTagName(s)[0];
+                t.async=1;t.src=e;a.parentNode.insertBefore(t,a)
+              })(window,document,'script','https://cdn.outseta.com/outseta.min.js');
+
+              Outseta('set', 'domain', 'treasuretto-llc.outseta.com');
+              Outseta('load');
             `,
           }}
         />
-        <script
-          src="https://cdn.outseta.com/outseta.min.js"
-          data-options="o_options"
-          async
-          defer
-        />
 
-        {/* ---------- Favicon / SEO (Optional additions) ---------- */}
+        {/* ---------- Favicon / SEO ---------- */}
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#A00028" />
       </head>
 
-      {/* ---------- BODY ---------- */}
       <body
         className={`${inter.variable} font-sans bg-vault-grad text-[#0A0A0A] antialiased`}
       >
