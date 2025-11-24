@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+// Lucide icons are used for visual appeal and functionality
 import { 
     Brain, FileSpreadsheet, BookOpen, Share2, Settings, BarChart3, 
     Zap, CheckCircle, XCircle, Loader2 
 } from "lucide-react";
+// motion from framer-motion has been removed to avoid compilation issues
+
+// --- START: SUPABASE CLIENT IMPORT AND INTEGRATION TEST LOGIC ---
 
 // IMPORTANT: This file needs to be located in your project root at /lib/supabase-outseta.ts
-// We use the relative path to resolve the module issue.
+// We use the simplest relative path here.
 import { supabase } from './lib/supabase-outseta'; 
-
-// --- START: INTEGRATION TEST COMPONENT (EMBEDDED) ---
-// This handles the authentication status check using your secure client.
 
 interface UserProfile {
     id: string;
@@ -198,34 +199,34 @@ export default function Page() {
     {
       name: "Depop",
       desc: "Master Depop growth — learn photography, branding, and pricing strategies that convert.",
-      image: "/images/depop.png",
+      // Using a basic placeholder URL
+      image: "https://placehold.co/42x42/A00028/ffffff?text=DP",
       href: "/academy/depop",
     },
     {
       name: "Whatnot",
       desc: "Host powerful live shows and optimize your auctions with proven tips and templates.",
-      image: "/images/whatnot.png",
+      // Using a basic placeholder URL
+      image: "https://placehold.co/42x42/0A0A0A/ffffff?text=WN",
       href: "/academy/whatnot",
     },
     {
       name: "eBay",
       desc: "Dominate the marketplace with SEO-driven titles, dynamic pricing, and listing data.",
-      image: "/images/ebay.png",
+      // Using a basic placeholder URL
+      image: "https://placehold.co/42x42/CBAF7A/ffffff?text=EB",
       href: "/academy/ebay",
     },
   ];
 
   return (
     <main className="min-h-screen w-full bg-gradient-to-b from-[#ffffff] via-[#fff6f6] to-[#fff0f2] flex flex-col items-center text-[#0A0A0A] px-6 py-14 sm:py-20">
-      <motion.div // Using basic div instead of motion.div due to removed dependency
-        // initial={{ opacity: 0, y: 10 }} 
-        // animate={{ opacity: 1, y: 0 }}
-        // transition={{ duration: 0.6 }}
+      <div // Removed motion.div
         className="w-full max-w-6xl"
       >
         {/* Header */}
         <div className="flex justify-between items-center bg-white/80 backdrop-blur-xl border border-white/70 rounded-3xl p-5 sm:p-6 shadow-[0_6px_25px_rgba(0,0,0,0.05)] mb-10">
-          {/* Replaced Image with img tag and placeholder to fix import error */}
+          {/* Logo Placeholder */}
           <img 
             src="https://placehold.co/42x42/A00028/ffffff?text=V"
             alt="Vault Logo"
@@ -243,7 +244,7 @@ export default function Page() {
 
         {/* Welcome Section */}
         <section className="text-center mb-6">
-          <div // Replaced motion.h1 with div/h1
+          <div // Removed motion.h1
             className="text-4xl sm:text-5xl font-bold text-[#0a0a0a] mb-4"
           >
             Welcome to <span className="text-[#A00028]">The Vault</span>
@@ -251,14 +252,12 @@ export default function Page() {
         </section>
         
         {/* --- LIVE INTEGRATION STATUS (PLACEMENT) --- */}
-        {/* Placement for the core test component */}
         <div className="mb-14">
             <h2 className="text-xl font-bold mb-4 text-gray-700 flex items-center justify-center gap-2">
                 <Zap className="w-5 h-5 text-yellow-600" />
                 Auth Bridge Status
             </h2>
-            {/* CALL TO THE EMBEDDED COMPONENT */}
-            <IntegrationTest /> 
+            <IntegrationTest />
         </div>
         {/* ------------------------------------------- */}
 
@@ -266,13 +265,13 @@ export default function Page() {
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {sections.map((section, i) => (
-            <a
+            <a // Removed Link
               key={i}
               href={section.href}
               target={section.href === settingsHref ? "_blank" : "_self"}
               rel={section.href === settingsHref ? "noopener noreferrer" : undefined}
             >
-              <div // Replaced motion.div with basic div
+              <div // Removed motion.div
                 className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-[0_8px_35px_rgba(0,0,0,0.07)] transition-all duration-300 p-8 flex flex-col gap-2 cursor-pointer"
               >
                 <div className="flex items-center gap-3 mb-2">
@@ -299,12 +298,12 @@ export default function Page() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {platforms.map((platform, i) => (
-              <a key={i} href={platform.href} target="_self" rel="noopener noreferrer"> {/* Replaced Link with a tag */}
-                <div // Replaced motion.div with basic div
+              <a key={i} href={platform.href} target="_self" rel="noopener noreferrer"> {/* Removed Link */}
+                <div // Removed motion.div
                   className="bg-white rounded-3xl border border-gray-100 p-8 text-left shadow-sm hover:shadow-[0_8px_35px_rgba(0,0,0,0.07)] transition-all duration-300"
                 >
                   <div className="flex items-center gap-4 mb-4">
-                      {/* Replaced Image with img tag and placeholder to fix import error */}
+                      {/* Placeholder Image */}
                     <img 
                       src={`https://placehold.co/42x42/CBAF7A/ffffff?text=${platform.name.slice(0,1)}`}
                       alt={platform.name}
@@ -328,7 +327,7 @@ export default function Page() {
           </div>
         </section>
 
-      </div> {/* Replaced motion.div with basic div */}
+      </div> {/* Removed motion.div */}
 
       <VaultFooter />
     </main>
@@ -361,7 +360,7 @@ function VaultFooter() {
     <footer className="relative w-full bg-[#fafafa] border-t border-gray-200 mt-24 py-16 px-10 text-gray-600">
       <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
         <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-          {/* Replaced Image with img tag and placeholder to fix import error */}
+          {/* Logo Placeholder */}
           <img 
             src="https://placehold.co/48x48/A00028/ffffff?text=V"
             alt="Vault Logo"
