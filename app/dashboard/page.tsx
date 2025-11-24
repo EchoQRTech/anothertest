@@ -6,12 +6,13 @@ import {
     Brain, FileSpreadsheet, BookOpen, Share2, Settings, BarChart3, 
     Zap, CheckCircle, XCircle, Loader2 
 } from "lucide-react";
-// motion from framer-motion has been removed to avoid compilation issues
+// Removed: Image, Link, motion imports. Using basic HTML tags instead.
 
 // --- START: SUPABASE CLIENT IMPORT AND INTEGRATION TEST LOGIC ---
 
-// IMPORTANT: This file needs to be located in your project root at /lib/supabase-outseta.ts
-// We use the simplest relative path here.
+// This import path is set to the standard local development location, 
+// assuming your custom client file is in the 'lib' folder at the root.
+// Please ensure your /lib/supabase-outseta.ts file exists.
 import { supabase } from './lib/supabase-outseta'; 
 
 interface UserProfile {
